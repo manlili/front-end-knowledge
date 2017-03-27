@@ -95,12 +95,12 @@ POST:由于不是通过URL传值，理论上数据不受限。但实际各个WEB
 POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了。
 
 ## js跨域请求的方式，能写几种是几种
-1、通过jsonp跨域
-2、通过修改document.domain来跨子域
-3、使用window.name来进行跨域
-4、使用HTML5中新引进的window.postMessage方法来跨域传送数据（ie 67 不支持）
-5、CORS 需要服务器设置header ：Access-Control-Allow-Origin。
-6、nginx反向代理 这个方法一般很少有人提及，但是他可以不用目标服务器配合，不过需要你搭建一个中转nginx服务器，用于转发请求
+1、通过jsonp跨域 
+2、通过修改document.domain来跨子域 
+3、使用window.name来进行跨域 
+4、使用HTML5中新引进的window.postMessage方法来跨域传送数据（ie 67 不支持） 
+5、CORS 需要服务器设置header ：Access-Control-Allow-Origin。 
+6、nginx反向代理 这个方法一般很少有人提及，但是他可以不用目标服务器配合，不过需要你搭建一个中转nginx服务器，用于转发请求 
 
 ## 请解释JSONP的工作原理，以及它为什么不是真正的AJAX。
 JSONP (JSON with Padding)是一个简单高效的跨域方式，HTML中的script标签可以加载并执行其他域的javascript，于是我们可以通过script标记来动态加载其他域的资源。例如我要从域A的页面pageA加载域B的数据，那么在域B的页面pageB中我以JavaScript的形式声明pageA需要的数据，然后在 pageA中用script标签把pageB加载进来，那么pageB中的脚本就会得以执行。JSONP在此基础上加入了回调函数，pageB加载完之后会执行pageA中定义的函数，所需要的数据会以参数的形式传递给该函数。JSONP易于实现，但是也会存在一些安全隐患，如果第三方的脚本随意地执行，那么它就可以篡改页面内容，截获敏感数据。但是在受信任的双方传递数据，JSONP是非常合适的选择。
@@ -108,15 +108,15 @@ JSONP (JSON with Padding)是一个简单高效的跨域方式，HTML中的script
 AJAX是不跨域的，而JSONP是一个是跨域的，还有就是二者接收参数形式不一样！
 
 ##  js深度复制的方式
-1.使用jq的$.extend(true, target, obj)
-2.newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj
-3.newobj = JSON.parse(JSON.stringify(sourceObj))
+1.使用jq的$.extend(true, target, obj) 
+2.newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj 
+3.newobj = JSON.parse(JSON.stringify(sourceObj)) 
 
 ## 在严格模式(‘use strict’)下进行 JavaScript 开发有什么好处？
-- 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为;
-- 消除代码运行的一些不安全之处，保证代码运行的安全；
-- 提高编译器效率，增加运行速度；
-- 为未来新版本的Javascript做好铺垫。 
+- 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为; 
+- 消除代码运行的一些不安全之处，保证代码运行的安全； 
+- 提高编译器效率，增加运行速度； 
+- 为未来新版本的Javascript做好铺垫。  
 
 ## 请描述下事件冒泡和事件捕获机制。
 - 冒泡型事件：事件按照从最特定的事件目标到最不特定的事件目标(document对象)的顺序触发。
@@ -285,7 +285,7 @@ var a = b;
 ```
 所以 b 成了全局变量，而 a 是自执行函数的一个局部变量。
 
-## 下面的代码会在 console 输出神马？为什么？
+## 下面的代码会在 console 输出什么？为什么？
 ```bash
 var myObject = {
     foo: "bar",
@@ -309,7 +309,7 @@ myObject.func();
 }(self));
 ```
 
-## 将 JavaScript 代码包含在一个函数块中有神马意思呢？为什么要这么做？
+## 将 JavaScript 代码包含在一个函数块中有什么意思呢？为什么要这么做？
 换句话说，为什么要用立即执行函数表达式（Immediately-Invoked Function Expression）。
 IIFE 有两个比较经典的使用场景，一是类似于在循环中定时输出数据项，二是类似于 JQuery/Node 的插件和模块开发。
 ```bash
