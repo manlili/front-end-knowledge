@@ -95,12 +95,12 @@ POST:由于不是通过URL传值，理论上数据不受限。但实际各个WEB
 POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了。
 
 ## js跨域请求的方式，能写几种是几种
-1、通过jsonp跨域 
-2、通过修改document.domain来跨子域 
-3、使用window.name来进行跨域 
-4、使用HTML5中新引进的window.postMessage方法来跨域传送数据（ie 67 不支持） 
-5、CORS 需要服务器设置header ：Access-Control-Allow-Origin。 
-6、nginx反向代理 这个方法一般很少有人提及，但是他可以不用目标服务器配合，不过需要你搭建一个中转nginx服务器，用于转发请求 
+1、通过jsonp跨域   
+2、通过修改document.domain来跨子域     
+3、使用window.name来进行跨域     
+4、使用HTML5中新引进的window.postMessage方法来跨域传送数据（ie 67 不支持）   
+5、CORS 需要服务器设置header ：Access-Control-Allow-Origin。  
+6、nginx反向代理 这个方法一般很少有人提及，但是他可以不用目标服务器配合，不过需要你搭建一个中转nginx服务器，用于转发请求   
 
 ## 请解释JSONP的工作原理，以及它为什么不是真正的AJAX。
 JSONP (JSON with Padding)是一个简单高效的跨域方式，HTML中的script标签可以加载并执行其他域的javascript，于是我们可以通过script标记来动态加载其他域的资源。例如我要从域A的页面pageA加载域B的数据，那么在域B的页面pageB中我以JavaScript的形式声明pageA需要的数据，然后在 pageA中用script标签把pageB加载进来，那么pageB中的脚本就会得以执行。JSONP在此基础上加入了回调函数，pageB加载完之后会执行pageA中定义的函数，所需要的数据会以参数的形式传递给该函数。JSONP易于实现，但是也会存在一些安全隐患，如果第三方的脚本随意地执行，那么它就可以篡改页面内容，截获敏感数据。但是在受信任的双方传递数据，JSONP是非常合适的选择。
