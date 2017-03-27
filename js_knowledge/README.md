@@ -20,12 +20,6 @@ console.log(Object.prototype.toString.call(NaN)); //[object Number]
 ### Undefined
 Undefined类型只有一个值，即特殊的undefined。在使用var声明变量但未对其加以初始化时，这个变量的值就是undefined。
 
-## 线程与进程的区别
-一个程序至少有一个进程，一个进程至少有一个线程。线程的划分尺度小于进程，使得多线程程序的并发性高。
-另外，进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。
-线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。
-从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。这就是进程和线程的重要区别。
-
 ## ==和===有什么不同？
 首先，== equality 等同，=== identity 恒等。 ==， 两边值类型不同的时候，要先进行类型转换，再比较。 ===，不做类型转换，类型不同的一定不等。
 
@@ -77,21 +71,15 @@ InternetExplorer允许cookie多达4095个字节，包括：名（name）、值�
 1.GET提交，请求的数据会附在URL之后（就是把数据放置在HTTP协议头＜request-line＞中），以?分割URL和传输数据，多个参数用&连接;例如：login.action?name=hyddd&password=idontknow&verify=%E4%BD%A0 %E5%A5%BD。如果数据是英文字母/数字，原样发送，如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如： %E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII。
 
 POST提交：把提交的数据放置在是HTTP包的包体＜request-body＞中。上文示例中红色字体标明的就是实际的传输数据
-
 因此，GET提交的数据会在地址栏中显示出来，而POST提交，地址栏不会改变
 
 2.传输数据的大小：
-
 首先声明，HTTP协议没有对传输的数据大小进行限制，HTTP协议规范也没有对URL长度进行限制。 而在实际开发中存在的限制主要有：
-
 GET:特定浏览器和服务器对URL长度有限制，例如IE对URL长度的限制是2083字节(2K+35)。对于其他浏览器，如Netscape、FireFox等，理论上没有长度限制，其限制取决于操作系统的支持。
-
 因此对于GET提交时，传输数据就会受到URL长度的限制。
-
 POST:由于不是通过URL传值，理论上数据不受限。但实际各个WEB服务器会规定对post提交数据大小进行限制，Apache、IIS6都有各自的配置。
 
 3.安全性：
-
 POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了。
 
 ## js跨域请求的方式，能写几种是几种
@@ -108,9 +96,9 @@ JSONP (JSON with Padding)是一个简单高效的跨域方式，HTML中的script
 AJAX是不跨域的，而JSONP是一个是跨域的，还有就是二者接收参数形式不一样！
 
 ##  js深度复制的方式
-1.使用jq的$.extend(true, target, obj)   
-2.newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj   
-3.newobj = JSON.parse(JSON.stringify(sourceObj))   
+1、使用jq的$.extend(true, target, obj)   
+2、newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj   
+3、newobj = JSON.parse(JSON.stringify(sourceObj))   
 
 ## 在严格模式(‘use strict’)下进行 JavaScript 开发有什么好处？
 - 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为; 
@@ -160,13 +148,11 @@ AJAX是不跨域的，而JSONP是一个是跨域的，还有就是二者接收�
 
 ## 简述AMD、CMD和UMD区别
 Commonjs 在Nodejs服务端上运行，无法在浏览器端运行。为了满足浏览器端模块化的要求，才有了AMD和CMD。
-
 ### AMD
 AMD (Asynchronous Module Definition)是 RequireJS 在推广过程中对模块定义的规范化产出。对于依赖的模块，AMD 是提前执行。AMD 推崇依赖前置，把依赖参数以数组形式保存在前半部分。使用规则如下：
 ```bash
 define(id?, dependencies?, factory);
 ```
-
 ### CMD
 CMD (Common Module Definition)是 Seajs 在推广过程中对模块定义的规范化产出。 CMD 是延迟执行，CMD 推崇依赖就近，使用规则如下：
 ```bash
@@ -174,7 +160,6 @@ define(function(require, exports, module) {
   // 模块代码
 });
 ```
-
 ### UMD
 UMD (Universal Module Definition)，AMD，CommonJS规范是两种不一致的规范，虽然他们应用的场景也不太一致，但是人们仍然是期望有一种统一的规范来支持这两种规范，对两种情况进行判断，UMD兼容两个规范。
 ```bash
@@ -197,7 +182,6 @@ UMD (Universal Module Definition)，AMD，CommonJS规范是两种不一致的规
     return myFunc;
 }));
 ```
-
 ### Require.js 和Sea.js区别
 Require.js 和Sea.js都是模块加载器，两者的主要区别如下：
 
@@ -304,8 +288,8 @@ myObject.func();
 第一个和第二个的输出不难判断，在 ES6 之前，JavaScript 只有函数作用域，所以 func 中的 IIFE 有自己的独立作用域，并且它能访问到外部作用域中的 self，所以第三个输出会报错，因为 this 在可访问到的作用域内是 undefined，第四个输出是 bar。如果你知道闭包，也很容易解决的：
 ```bash
 (function(test) {
-            console.log("inner func:  this.foo = " + test.foo);  //'bar'
-            console.log("inner func:  self.foo = " + self.foo);
+  console.log("inner func:  this.foo = " + test.foo);  //'bar'
+  console.log("inner func:  self.foo = " + self.foo);
 }(self));
 ```
 
@@ -314,19 +298,19 @@ myObject.func();
 IIFE 有两个比较经典的使用场景，一是类似于在循环中定时输出数据项，二是类似于 JQuery/Node 的插件和模块开发。
 ```bash
 for(var i = 0; i < 5; i++) {
-    setTimeout(function() {
-        console.log(i);  
-    }, 1000);
+  setTimeout(function() {
+      console.log(i);  
+  }, 1000);
 }
 ```
 上面的输出并不是你以为的0，1，2，3，4，而输出的全部是5，这时 IIFE 就能有用了：
 ```bash
 for(var i = 0; i < 5; i++) {
-    (function(i) {
-      setTimeout(function() {
-        console.log(i);  
-      }, 1000);
-    })(i)
+  (function(i) {
+    setTimeout(function() {
+      console.log(i);  
+    }, 1000);
+  })(i)
 }
 ```
 而在 JQuery/Node 的插件和模块开发中，为避免变量污染，也是一个大大的 IIFE
@@ -336,10 +320,7 @@ for(var i = 0; i < 5; i++) {
  } )(jQuery);
 ```
 
-## 解释“JavaScript模块模式”以及你在何时使用它？
-
 ## 请指出JavaScript宿主对象和原生对象的区别？
-
 ### 原生对象
 ECMA-262 把本地对象（native object）定义为“独立于宿主环境的 ECMAScript 实现提供的对象”。
 “本地对象”包含哪些内容：Object、Function、Array、String、Boolean、Number、Date、RegExp、Error、EvalError、RangeError、ReferenceError、SyntaxError、TypeError、URIError。
@@ -366,14 +347,6 @@ ECMA-262 把内置对象（built-in object）定义为“由 ECMAScript 实现�
 对于apply和call两者在作用上是相同的，但两者在参数上有以下区别： 
 对于第一个参数意义都一样，但对第二个参数：apply传入的是一个参数数组，也就是将多个参数组合成为一个数组传入，而call则作为call的参数传入（从第二个参数开始）。如 func.call(func1,var1,var2,var3)对应的apply写法为：func.apply(func1,[var1,var2,var3])同时使用apply的好处是可以直接将当前函数的arguments对象作为apply的第二个参数传入。
 
-## 请解释Function.prototype.bind的作用？
-
-## 请尽可能详尽的解释AJAX的工作原理？
-
-## 你能解释一下JavaScript中的继承是如何工作的吗？
-
-## 为什么扩展JavaScript内置对象不是好的做法？
-
 ## ”attribute”和”property”的区别是什么？
 1.定义
 Property：属性，所有的HTML元素都由HTMLElement类型表示，HTMLElement类型直接继承自Element并添加了一些属性，添加的这些属性分别对应于每个HTML元素都有下面的这5个标准特性: id,title,lang,dir,className。DOM节点是一个对象，因此，他可以和其他的JavaScript对象一样添加自定义的属性以及方法。property的值可以是任何的数据类型，对大小写敏感，自定义的property不会出现在html代码中，只存在js中。
@@ -389,27 +362,22 @@ Attribute：特性，区别于property，attribute只能是字符串，大小写
 
 ## 你如何从浏览器的URL中获取查询字符串参数。
 ```bash
- 1 function parseQueryString ( name ){
-      name = name.replace(/[\[]/,"\\\[");
-      var regexS = "[\\?&]"+name+"=([^&#]*)";
-      var regex = new RegExp( regexS );
-      var results = regex.exec( window.location.href );
- 
-      if(results == null) {
-          return "";
-      } else {
-     return results[1];
-     }
- }
+function parseQueryString ( name ){
+  name = name.replace(/[\[]/,"\\\[");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+
+  if(results == null) {
+      return "";
+  } else {
+   return results[1];
+  }
+}
 ```
 
 ## 请解释一下JavaScript的同源策略。
 在客户端编程语言中，如javascript和 ActionScript，同源策略是一个很重要的安全理念，它在保证数据的安全性方面有着重要的意义。同源策略规定跨域之间的脚本是隔离的，一个域的脚本不能访问和操作另外一个域的绝大部分属性和方法。那么什么叫相同域，什么叫不同的域呢？当两个域具有相同的协议, 相同的端口，相同的host，那么我们就可以认为它们是相同的域。同源策略还应该对一些特殊情况做处理，比如限制file协议下脚本的访问权限。本地的HTML文件在浏览器中是通过file协议打开的，如果脚本能通过file协议访问到硬盘上其它任意文件，就会出现安全隐患，目前IE8还有这样的隐患。
-
-## 如何实现下列代码：[1,2,3,4,5].duplicator();
-//[1,2,3,4,5,1,2,3,4,5]。
-
-## 描述一种JavaScript中实现memoization(避免重复运算)的策略。
 
 ## 解释”chaining”。
 jQuery方法链接。直到现在，我们都是一次写一条jQuery语句（一条接着另一条）。不过，有一种名为链接（chaining）的技术，允许我们在相同的元素上运行多条jQuery命令，一条接着另一条。
@@ -423,7 +391,6 @@ jQuery方法链接。直到现在，我们都是一次写一条jQuery语句（�
 简单说，deferred对象就是jQuery的回调函数解决方案。在英语中，defer的意思是”延迟”，所以deferred对象的含义就是”延迟”到未来某个点再执行。
 
 ## 你如何给一个事件处理函数命名空间，为什么要这样做？
-
 任何作为type参数的字符串都是合法的；如果一个字符串不是原生的JavaScript事件名，那么这个事件处理函数会绑定到一个自定义事件上。这些自定义事件绝对不会由浏览器触发，但可以通过使用.trigger()或者.triggerHandler()在其他代码中手动触发。如果type参数的字符串中包含一个点(.)字符，那么这个事件就看做是有命名空间的了。这个点字符就用来分隔事件和他的命名空间。举例来说，如果执行.bind(‘click.name’,handler)，那么字符串中的click是事件类型，而字符串name就是命名空间。命名空间允许我们取消绑定或者触发一些特定类型的事件，而不用触发别的事件。参考unbind()来获取更多信息。
 
 jQuery的bind/unbind方法应该说使用很简单，而且大多数时候可能并不会用到，取而代之的是直接用click/keydown之类的事件名风格的方法来做事件绑定操作。
@@ -442,3 +409,19 @@ jQuery的bind/unbind方法应该说使用很简单，而且大多数时候可能
 - 创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
 - 结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
 - 行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模
+
+## 请解释Function.prototype.bind的作用,如果浏览器不支持Function.prototype.bind特性，请实现一个让浏览器支持？
+
+## 解释“JavaScript模块模式”以及你在何时使用它？
+
+## 请尽可能详尽的解释AJAX的工作原理？
+
+## 你能解释一下JavaScript中的继承是如何工作的吗？
+
+## 为什么扩展JavaScript内置对象不是好的做法？
+
+## 描述一种JavaScript中实现memoization(避免重复运算)的策略。
+
+## 解释ES6中Promise
+
+## 写一个算法实现麻将的随机
