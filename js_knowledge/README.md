@@ -108,9 +108,9 @@ JSONP (JSON with Padding)是一个简单高效的跨域方式，HTML中的script
 AJAX是不跨域的，而JSONP是一个是跨域的，还有就是二者接收参数形式不一样！
 
 ##  js深度复制的方式
-1.使用jq的$.extend(true, target, obj) 
-2.newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj 
-3.newobj = JSON.parse(JSON.stringify(sourceObj)) 
+1.使用jq的$.extend(true, target, obj)   
+2.newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj   
+3.newobj = JSON.parse(JSON.stringify(sourceObj))   
 
 ## 在严格模式(‘use strict’)下进行 JavaScript 开发有什么好处？
 - 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为; 
