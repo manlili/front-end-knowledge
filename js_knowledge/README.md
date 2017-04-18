@@ -410,6 +410,16 @@ jQuery的bind/unbind方法应该说使用很简单，而且大多数时候可能
 - 结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
 - 行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模
 
+## 简述JS深浅拷贝的原理及项目应用
+[答案我已总结出来，点击查看参考地址](https://manlili.github.io/2017/04/17/JS%E7%9A%84%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D%E7%A0%94%E7%A9%B6/)
+
+## 写出下面的输出结果
+```bash
+var p = new Promise((resolve, reject)=> {reject()}).then(()=>{console.info('resolve1')}, ()=>{console.info('reject1')})
+p.then(()=>{console.info('resolve2')}, ()=>{console.info('reject2')})
+```
+输出结果reject1, resolve2
+
 ## 请解释Function.prototype.bind的作用,如果浏览器不支持Function.prototype.bind特性，请实现一个让浏览器支持？
 
 ## 解释“JavaScript模块模式”以及你在何时使用它？
