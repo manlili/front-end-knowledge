@@ -12,7 +12,7 @@
   <tr>
     <td rowspan="3" align="center" valign="middle"><strong>html知识点</strong></td>
     <td align="center" valign="middle">初级</td>
-    <td align="center" valign="middle"><a target="_blank" href="https://github.com/manlili/web_interview_question/tree/master/html_knowledge/primary">点这里跳转</a></td>
+    <td align="center" valign="middle"><a href="https://github.com/manlili/web_interview_question/tree/master/html_knowledge/primary" target="_blank">点这里跳转</a></td>
   </tr>
   <tr>
     <td align="center" valign="middle">中级</td>
