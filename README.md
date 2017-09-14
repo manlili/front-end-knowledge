@@ -12,45 +12,45 @@
   <tr>
     <td rowspan="3" align="center" valign="middle">html知识点</td>
     <td align="center" valign="middle">初级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/html_knowledge/primary)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/html_knowledge/primary)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">中级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/html_knowledge/intermediate)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/html_knowledge/intermediate)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">高级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/html_knowledge/advanced)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/html_knowledge/advanced)</td>
   </tr>
   <tr>
     <td rowspan="3" align="center" valign="middle">css知识点</td>
     <td align="center" valign="middle">初级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/css_knowledge/primary)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/css_knowledge/primary)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">中级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/css_knowledge/intermediate)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/css_knowledge/intermediate)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">高级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/css_knowledge/advanced)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/css_knowledge/advanced)</td>
   </tr>
   <tr>
     <td rowspan="3" align="center" valign="middle">js知识点</td>
     <td align="center" valign="middle">初级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/js_knowledge/primary)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/js_knowledge/primary)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">中级</td>
-    <td align="center" valign="middle">[地址]https://github.com/manlili/web_interview_question/tree/master/js_knowledge/intermediate()</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/js_knowledge/intermediate)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">高级</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/js_knowledge/advanced)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/js_knowledge/advanced)</td>
   </tr>
   <tr>
     <td align="center" valign="middle">其他知识点</td>
     <td align="center" valign="middle">补充部分</td>
-    <td align="center" valign="middle">[地址](https://github.com/manlili/web_interview_question/tree/master/related_questions)</td>
+    <td align="center" valign="middle">[点这里跳转](https://github.com/manlili/web_interview_question/tree/master/related_questions)</td>
   </tr>
 </table>
