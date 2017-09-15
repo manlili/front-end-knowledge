@@ -1,9 +1,9 @@
 # 前端面试知识总结
 写在前面的一些话
-> 少一点功利主义的追求，多一点不为什么的追求
+> 少一点功利主义的追求，多一点不为什么的坚持，不忘初心，方的始终
 
 
-<table width="948" border="1">
+<table width="948">
   <tr>
     <td width="175" align="center"><strong>主分类</strong></td>
     <td width="151" align="center"><strong>子分类</strong></td>
