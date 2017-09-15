@@ -1,4 +1,4 @@
-# js面试的中级级知识点
+# js面试的中级知识点
 排序不分难易,答案仅供参考
 
 ## 如何准确判断一个变量是引用类型
@@ -99,6 +99,7 @@ f.alertName()
 ```
 
 ## 如何区分方法是属于这个对象还是它继承的？
+- 使用hasOwnProperty属性
 ```bash
 function Foo (name, age) {
     this.name = name
@@ -143,7 +144,7 @@ f.toString()   //注意：要去f.__proto__.__proto__里面找
 ```
 注意上面多了一个toString(),在f的``__proto__``中没有，那么它就去构造函数Foo.prototype中去找，还是没有，这时就要顺着Foo的``__proto__``找它的构造函数Object.prototype中去找
 下面来看一张图
-![图](https://github.com/manlili/web_interview_question/img/prototype.jpg)
+![图](https://github.com/manlili/web_interview_question/blob/master/img/prototype.jpg)
 
 ## 写一个原型链继承的例子
 
