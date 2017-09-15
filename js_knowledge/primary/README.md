@@ -1,13 +1,19 @@
-[TOC]
+<!--[TOC]-->
 
 # js面试的初级知识点
 排序不分难易,答案仅供参考
 
-## 简述js基本数据类型和引用数据类型，以及存储在内存哪里？
-基本数据类型：Undefined、Null、Boolean、Number和String，基本型数据存在栈中
-引用数据类型：Object、Array和Function，引用型数据引用地址存在栈中，而实体对象存在堆中。
+## 简述js基本数据类型(值类型)和引用数据类型，以及存储在内存哪里？
+## 基本数据类型
+- Undefined、Null、Boolean、Number和String
+- 基本型数据存在栈中  
+- 特点：由于每个变量都需要自己的内存空间，所以占用的空间比较大
+## 引用数据类型
+- Object、Array和Function
+- 引用型数据引用地址存在栈中，而实体对象存在堆中
+- 特点：共用相同的内存空间
 
-## 什么是 NaN和Undefined，它的类型是什么？怎么测试一个值是否等于 NaN?
+## 什么是NaN和Null,Undefined，它的类型是什么？怎么测试一个值是否等于 NaN?
 ### NaN
 NaN 是 Not a Number 的缩写，JavaScript 的一种特殊数值，其类型是 Number，可以通过 isNaN(param) 来判断一个值是否是 NaN：
 ```bash
@@ -19,48 +25,183 @@ console.log(NaN === NaN); //false
 console.log(NaN === undefined); //false
 console.log(undefined === undefined); //false
 console.log(typeof NaN); //number
-console.log(Object.prototype.toString.call(NaN)); //[object Number]
 ```
+### Null
+null表示没有定义过
 ### Undefined
-Undefined类型只有一个值，即特殊的undefined。在使用var声明变量但未对其加以初始化时，这个变量的值就是undefined。
-
-## ==和===有什么不同？
-首先，== equality 等同，=== identity 恒等。 ==， 两边值类型不同的时候，要先进行类型转换，再比较。 ===，不做类型转换，类型不同的一定不等。
-
-先说 ===，这个比较简单。下面的规则用来判断两个值是否===相等：
-
-如果类型不同，就[不相等]
-如果两个都是数值，并且是同一个值，那么[相等]；(！例外)的是，如果其中至少一个是NaN，那么[不相等]。（判断一个值是否是NaN，只能用isNaN()来判断）
-如果两个都是字符串，每个位置的字符都一样，那么[相等]；否则[不相等]。
-如果两个值都是true，或者都是false，那么[相等]。
-如果两个值都引用同一个对象或函数，那么[相等]；否则[不相等]。
-如果两个值都是null，或者都是undefined，那么[相等]。 
-再说 ==，根据以下规则：
-如果两个值类型相同，进行 === 比较。
-如果两个值类型不同，他们可能相等。根据下面规则进行类型转换再比较： 
-1.如果一个是null、一个是undefined，那么[相等]。 
-2.如果一个是字符串，一个是数值，把字符串转换成数值再进行比较。 
-3.如果任一值是 true，把它转换成 1 再比较；如果任一值是 false，把它转换成 0 再比较。 
-4.如果一个是对象，另一个是数值或字符串，把对象转换成基础类型的值再比较。对象转换成基础类型，利用它的toString或者valueOf方法。js核心内置类，会尝试valueOf先于toString；例外的是Date，Date利用的是toString转换。
-5.任何其他组合，都[不相等]。
+undefined表示已定义但是未赋值。
+## 强制类型转换发生的情况有哪些？
+- 字符串拼接
+```bash
+var a = 100 + '10' //10010
+```
+- ==运算符
+```bash
+100 == '100'  //true
+null == undefined  //true,注意这里，一般==有且仅当这种情况才是用
+```
+- if语句
+```bash
+var a = 100
+if (a) {
+    
+}
+```
+- 逻辑运算
+## ==和===有什么不同？何时使用===，何时使用==？
+- == 先强制类型转换同一种数值，然后比较数据  
+- === 先比较数据类型，再比较数据
+- 一般除了下面示例是==，其他的全部用===
+```bash
+//jquery框架中的推荐写法
+if (obj.a == null) {
+ // 这里相当于obj.a === null || obj.a === undefined 的简写形式
+}
+```
 
 ## 请指出document.onload和document.ready两个事件的区别。
-页面加载完成有两种事件，一是ready，表示文档结构已经加载完成（不包含图片等非文字媒体文件），二是onload，指示页面包含图片等文件在内的所有元素都加载完成。
+页面加载完成有两种事件：
+- ready，表示文档结构已经加载完成（不包含图片等非文字媒体文件）
+- onload，指示页面包含图片等文件在内的所有元素都加载完成。
 
-## 什么是三元表达式？“三元”表示什么意思？
-三元表达式：? :。三元–三个操作对象。
-在表达式boolean-exp ? value0 : value1 中，如果“布尔表达式”的结果为true，就计算“value0”，而且这个计算结果也就是操作符最终产生的值。如果“布尔表达式”的结果为false，就计算“value1”，同样，它的结果也就成为了操作符最终产生的值。
+## JS中有哪些内置函数,以及每个内置函数对应的方法
+- Array
+    - push
+    - pop
+    - unshift
+    - shift
+    - reverse
+    - sort
+    - slice
+    - splice
+    - toSource
+    - valueOf
+    - concat
+    - toString
+    - toLocalString
+    - join
 
-## JavaScript里函数参数arguments是数组吗？
-在函数代码中，使用特殊对象 arguments，开发者无需明确指出参数名，通过使用下标就可以访问相应的参数。
-arguments虽然有一些数组的性质，但其并非真正的数组，只是一个类数组对象。其并没有数组的很多方法，不能像真正的数组那样调用.jion(),.concat(),.pop()等方法。
+- String
+    - charAt
+    - charCodeAt
+    - indexOf
+    - lastIndexOf
+    - match
+    - repalce
+    - search
+    - toLowerCase
+    - toUpperCase
+    - toLocaleLowerCase
+    - toLocaleUpperCase
+    - slice
+    - substring
+    - toSource
+    - valueOf
+    - toString
+    - split
+    
+- Math
+    - ceil(x)
+    - floor(x)
+    - round(x)
+    - max(x,y)
+    - min(x,y)
+    - random()
+    - toSource
+    - valueOf
+- Date
+    - Date
+    - getTime
+    - getFullYear
+    - getMonth
+    - getDate
+    - getDay
+    - getHours
+    - getMinutes
+    - getSeconds
+    - getMilliseconds
+    - 
+    - setTime
+    - setFullYear
+    - setMonth
+    - setDate
+    - setDay
+    - setHours
+    - setMinutes
+    - setSeconds
+    - setMilliseconds
+    - 
+    - toString
+    - toSource
+    - valueOf
+- RegExp
+    - test
+    - exec
+    - search
+    - split
+    - replace
+    - match
+- Number
+- Boolean
+- Object
+- Error
+- Function
 
-## data-属性的作用是什么？
-data-* 属性用于存储页面或应用程序的私有自定义数据。data-* 属性赋予我们在所有 HTML 元素上嵌入自定义 data 属性的能力。存储的（自定义）数据能够被页面的 JavaScript 中利用，以创建更好的用户体验（不进行 Ajax 调用或服务器端数据库查询）。
+## 如何理解JSON
+- JSON是一个简单的JS对象
+- 有两个api
+    - JSON.stringify({a: 10, b:20})
+    - JSON.parse('{"a": 10, "b", 20}')
 
-data-* 属性包括两部分：
-属性名不应该包含任何大写字母，并且在前缀 “data-” 之后必须有至少一个字符
-属性值可以是任意字符串
+## JS中使用typeof能得到哪些类型？
+- 可能的字符串有："number"、"string"、"boolean"、"object"、"function" 和 "undefined"。  
+- 需要注意typeof null的返回值是object
+- 特点：只能区分值类型，区分不了引用类型，因为引用类型返回的都是object，这个时候需要用instanceof
+- 实例：  
+<table width="600">
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">表达式</td>
+      <td align="center" valign="middle">返回值</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof undefined</td>
+      <td align="center" valign="middle">'undefined'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof null</td>
+      <td align="center" valign="middle">'object'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof true</td>
+      <td align="center" valign="middle">'boolean'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof 123</td>
+      <td align="center" valign="middle">'number'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof &quot;abc&quot;</td>
+      <td align="center" valign="middle">'string'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof function() {}</td>
+      <td align="center" valign="middle">'function'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof {}</td>
+      <td align="center" valign="middle">'object'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof []</td>
+      <td align="center" valign="middle">'object'</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">typeof unknownVariable</td>
+      <td align="center" valign="middle">'undefined'</td>
+    </tr>
+  </tbody>
+</table>
 
 ## 请描述一下cookies，sessionStorage和localStorage的区别？
 sessionStorage和localStorage是HTML5 Web Storage API提供的，可以方便的在web请求之间保存数据。有了本地数据，就可以避免数据在浏览器和服务器间不必要地来回传递。sessionStorage、localStorage、cookie都是在浏览器端存储的数据，其中sessionStorage的概念很特别，引入了一个“浏览器窗口”的概念。sessionStorage是在同源的同窗口（或tab）中，始终存在的数据。也就是说只要这个浏览器窗口没有关闭，即使刷新页面或进入同源另一页面，数据仍然存在。关闭窗口后，sessionStorage即被销毁。同时“独立”打开的不同窗口，即使是同一页面，sessionStorage对象也是不同的cookies会发送到服务器端。其余两个不会。Microsoft指出InternetExplorer8增加cookie限制为每个域名50个，但IE7似乎也允许每个域名50个cookie。
@@ -102,20 +243,11 @@ AJAX是不跨域的，而JSONP是一个是跨域的，还有就是二者接收�
 ##  js深度复制的方式
 1、使用jq的$.extend(true, target, obj)   
 2、newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj   
-3、newobj = JSON.parse(JSON.stringify(sourceObj))   
-
-## 在严格模式(‘use strict’)下进行 JavaScript 开发有什么好处？
-- 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为; 
-- 消除代码运行的一些不安全之处，保证代码运行的安全； 
-- 提高编译器效率，增加运行速度； 
-- 为未来新版本的Javascript做好铺垫。  
+3、newobj = JSON.parse(JSON.stringify(sourceObj))     
 
 ## 请描述下事件冒泡和事件捕获机制。
 - 冒泡型事件：事件按照从最特定的事件目标到最不特定的事件目标(document对象)的顺序触发。
 - 捕获型事件：事件从最不精确的对象(document 对象)开始触发，然后到最精确(也可以在窗口级别捕获事件，不过必须由开发人员特别指定)。
-
-## 什么是哈希表？
-散列表（也叫哈希表），是根据关键码值直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。这个映射函数叫做散列函数，存放记录的数组叫做散列表。
 
 ## 什么是闭包，如何使用它，为什么要使用它？
 闭包就是能够读取其他函数内部变量的函数。由于在Javascript语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成“定义在一个函数内部的函数”。
@@ -437,5 +569,3 @@ p.then(()=>{console.info('resolve2')}, ()=>{console.info('reject2')})
 ## 描述一种JavaScript中实现memoization(避免重复运算)的策略。
 
 ## 解释ES6中Promise
-
-## 写一个算法实现麻将的随机
