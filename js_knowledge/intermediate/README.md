@@ -12,7 +12,7 @@ function Foo () {   //其实是 var Foo = new Function (参数)
 ```
 上面如果直接表明很容易看出来变量的类型，但是不能每次都用眼看，这个时候我们可以用instanceof
 ### instanceof
-- 通常来讲，使用 instanceof 就是判断一个实例是否属于某种类型
+- 通常来讲，使用 instanceof 就是判断引用类型（数组、对象、函数）属于哪个构造函数的方法
 - 与 typeof 方法不同的是，instanceof 方法要求开发者明确地确认对象为某特定类型
  ```bash
 // 判断 foo 是否是 Foo 类的实例
@@ -142,11 +142,30 @@ f.printName()
 f.alertName()
 f.toString()   //注意：要去f.__proto__.__proto__里面找
 ```
-注意上面多了一个toString(),在f的``__proto__``中没有，那么它就去构造函数Foo.prototype中去找，还是没有，这时就要顺着Foo的``__proto__``找它的构造函数Object.prototype中去找
-下面来看一张图
+注意上面多了一个toString(),在f的``__proto__``中没有，那么它就去构造函数Foo.prototype中去找，还是没有，这时就要顺着Foo的``__proto__``找它的构造函数Object.prototype中去找  
+下面来看上面代码实现的原理图  
 ![图](https://github.com/manlili/web_interview_question/blob/master/img/prototype.jpg)
 
 ## 写一个原型链继承的例子
+- 很Low的写法
+```bash
+function Animal () {
+    this.eat = function () {
+        console.log('animal eat')
+    }
+}
+function Dog () {
+    this.bark = function () {
+        console.log('dog bark')
+    }
+}
+Dog.prototype = new Animal ()  //注意这里是new
+var hashiqi = new Dog ()
+```
+- 贴合实际的写法
+```bash
+
+```
 
 ## 描述new一个对象的过程
 先来看一段代码
@@ -162,8 +181,9 @@ var f = new Foo ('zhangsan', 20)
 var f2 = new Foo ('lisi', 25)   //创建多个对象
 ```
 下面来总结一下发生的具体过程
-1. 首先先new一个对象，可传可不传参数
-2. 接着走到构造函数里面，这时候this是空对象，接着将参数赋值给this
+1. 首先new一个对象，可传可不传参数,this指向这个空对象
+2. 接着走到构造函数里面，将参数赋值给this
 3. 最后将this返回出去，这一步构造函数是默认返回的，可省略，但是面试是要说的
 
 ## zepto(或者其他框架)源码中如何使用原型链
+这个我已经有专门的博客写好了,<a href="https://manlili.github.io/categories/Zepto%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">传送门</a>
