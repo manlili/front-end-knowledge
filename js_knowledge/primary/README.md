@@ -464,6 +464,140 @@ for (i = 0; i < 10; i++) {
 }
 ```
 
+## 同步和异步的区别？分别举一个同步和异步的例子
+### 异步
+```bash
+console.log(100)
+setTimeout(function () {
+    console.log(200)
+}, 1000)
+console.log(300)  //效果是100 300 200
+```
+### 同步
+```bash
+console.log(100)
+console.log(200)
+console.log(300)
+```
+### 异步和同步的区别
+在于有没有阻塞程序的进程，同步阻塞，异步不阻塞
+```bash
+console.log(100)
+alert(200)  //什么时候确认，什么时候执行下面的代码
+console.log(300)
+```
+### 何时需要异步
+- 有可能发生等待的情况
+- 等待过程中不能像alert一样阻塞程序的运行
+
+
+## 前端使用异步的场景有哪些？
+- 定时任务：setTimeout，setInverval
+- 网络请求：ajax请求， 动态<img>加载
+- 事件绑定：比如监听点击事件
+```bash
+//ajax请求示例
+console.log('start')
+$.get('./data.json', function (data) {
+    console.log(data)
+})
+console.log('end') //先打印start  end  data
+
+//img加载示例
+console.log('start')
+var img = document.createElement('img')
+img.onload = function () {
+    console.log('loaded')
+}
+img.src = '/***.png'
+console.log('end')  //先打印start end loaded
+
+//事件绑定示例
+console.log('start')
+document.getElementById('btn1').addEventListener('click', function() {
+    alert('clicked')
+})
+console.log('end')  //先打印start end clicked
+```
+## 什么是单线程？单线程和异步的关系？
+### 单线程
+js是单线程，一次只能做一件事情，一般都是配合异步使用
+```bash
+console.log(100)
+setTimeout(function () {
+    console.log(200)
+})  //注意这里没有1000毫秒延时，但是setTimout是异步的标志，遇见这个标签就会自动挂起，等后面代码执行完再执行这里
+console.log(300)  //效果是100 300 200
+```
+上面的过程是：
+- 执行第一行，打印100
+- 执行setTimeout后，传入setTimout的函数会被暂存起来，不会立即执行（单线程的特点，不能同时干两件事情）
+- 执行最后一行，打印300
+- 待所有的程序都执行完，处于空闲状态时，会立马看有没有暂存起来的要执行
+- 发现暂存起来要执行的setTimout中函数无需等待时间，就立即过来执行
+
+```bash
+console.log(100)
+setTimeout(function () {
+    console.log(200)
+}, 1000)  
+console.log(300)  //效果是100 300 200
+```
+上面的过程是：
+- 执行第一行，打印100
+- 执行setTimeout后，传入setTimout的函数会被暂存起来，不会立即执行（单线程的特点，不能同时干两件事情），但是需要1秒后才能解封
+- 执行最后一行，打印300
+- 待所有的程序都执行完，处于空闲状态时，会立马看有没有暂存起来的要执行
+- 发现暂存起来要执行的setTimout中函数需要等待1秒后解封，就等它解封后再执行
+
+再举个例子
+```bash
+//ajax请求示例
+console.log('start')
+$.get('./data.json', function (data) {
+    console.log(data)
+})
+console.log('end') //先打印start  end  data
+```
+上面的过程是：
+- 执行第一行，打印start
+- 执行ajax请求后，将请求后返回的结果暂存，继续执行下面的
+- 执行最后一行，打印end
+- 待所有的程序都执行完，处于空闲状态时，会立马看有没有暂存起来的要执行
+- 这时候需要看服务器那边有没有返回数据，如果返回，则直接执行，没有返回就继续等待结果返回
+
+```bash
+//事件绑定示例
+console.log('start')
+document.getElementById('btn1').addEventListener('click', function() {
+    alert('clicked')
+})
+console.log('end')  //先打印start end clicked
+```
+上面的过程是：
+- 执行第一行，打印start
+- 等待点击，暂存起来这个事件
+- 执行最后一行，打印end
+- 待所有的程序都执行完，处于空闲状态时，会立马看有没有暂存起来的要执行
+- 这时候需要看用户有没有点击，没有点击继续等待，点击后接着执行，当然用户可能会点击很多次
+
+## 一个关于setTimeout的笔试题
+```bash
+console.log(1)
+setTimeout(function() {
+    console.log(2)
+}, 0)
+console.log(3)
+setTimeout(function() {
+    console.log(4)
+}, 1000)
+console.log(5)
+//打印的结果是 1 3 5 2 4
+```
+
+### 单线程和异步的关系
+就是是单线程，但是我想一次做多个事情，这个时候就需要暂存起来，就需要异步
+
 ## 请描述一下cookies，sessionStorage和localStorage的区别？
 sessionStorage和localStorage是HTML5 Web Storage API提供的，可以方便的在web请求之间保存数据。有了本地数据，就可以避免数据在浏览器和服务器间不必要地来回传递。sessionStorage、localStorage、cookie都是在浏览器端存储的数据，其中sessionStorage的概念很特别，引入了一个“浏览器窗口”的概念。sessionStorage是在同源的同窗口（或tab）中，始终存在的数据。也就是说只要这个浏览器窗口没有关闭，即使刷新页面或进入同源另一页面，数据仍然存在。关闭窗口后，sessionStorage即被销毁。同时“独立”打开的不同窗口，即使是同一页面，sessionStorage对象也是不同的cookies会发送到服务器端。其余两个不会。Microsoft指出InternetExplorer8增加cookie限制为每个域名50个，但IE7似乎也允许每个域名50个cookie。
 
