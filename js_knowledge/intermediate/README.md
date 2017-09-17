@@ -70,7 +70,7 @@ arr.__proto__
 function fn () { }
 fn.__proto__
 ```
-- 所有的函数（不包括数组，对象）都有一个prototype显示原型属性，它也是一个普通的对象
+- 所有的函数（不包括数组，对象）都有一个prototype显式原型属性，它也是一个普通的对象
 ```bash
 function fn () { }
 fn.prototype
@@ -116,9 +116,9 @@ f.printName = function () {
 for (item in f) {
     //do something
     if (f.hasOwnProperty(item)) {
-        console.log("对象本身的属性"+ item)
+        console.log("对象本身的属性"+ item)  //name printName
     }else {
-        console.log("对象继承的属性"+ item)
+        console.log("对象继承的属性"+ item)  //alertName
     }
 }
 ```
@@ -163,8 +163,39 @@ Dog.prototype = new Animal ()  //注意这里是new
 var hashiqi = new Dog ()
 ```
 - 贴合实际的写法
+写一个封装DOM查询的例子
 ```bash
+function Elem(id) {
+    this.elem = document.getElementById(id)
+}
+Elem.prototype.html = function (val) {
+    var elem = this.elem
+    if (val) {
+        elem.innerHTML = val
+        return this   //链式操作
+    }else {
+        return elem.innerHTML
+    }
+}
+elem.prototype.on = function (type, fn) {
+    var elem = this.elem
+    elem.addEventListener(type, fn)
+    return this
+}
 
+//一般使用
+var div1 = new Elem("test")
+div1.html('<p>123</p>')
+div1.on(click, function () {
+    alert('clicked')
+})
+
+//由于返回了this,所以可以链式操作
+div1.html('<p>123</p>')
+.on(click, function () {
+    alert('clicked')
+})
+.html()
 ```
 
 ## 描述new一个对象的过程
@@ -186,8 +217,8 @@ var f2 = new Foo ('lisi', 25)   //创建多个对象
 3. 最后将this返回出去，这一步构造函数是默认返回的，可省略，但是面试是要说的
 
 ## zepto(或者其他框架)源码中如何使用原型链
-这个我已经有专门的博客写好了,<a href="https://manlili.github.io/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97-zepto/">传送门</a>
-整个zepto的源码架构就是
+这个我已经有专门的博客写好了,具体细节请看<a href="https://manlili.github.io/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97-zepto/">传送门</a>  
+整个zepto的源码大概架构就是
 ```bash
 var Zepto = (function(){
   var $,
@@ -214,7 +245,7 @@ var Zepto = (function(){
       // ...很多属性...
   }
   zepto.Z.prototype = Z.prototype = $.fn
-  
+
   // ...省略N行代码...
   
   return $
