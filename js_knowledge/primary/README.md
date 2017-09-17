@@ -203,6 +203,267 @@ if (obj.a == null) {
   </tbody>
 </table>
 
+## 说一下对变量提升的理解
+### 执行上下文
+- 范围：<script>内（即全局范围）或者一个函数内（局部范围）
+- 全局范围：变量定义、函数声明会自动提前
+- 函数范围：变量定义、函数声明、this声明、arguments定义也会自动提前
+```bash
+console.log(b) //直接报错，因为找不到b
+
+console.log(a)  //undefined,这里需要注意：首先执行下面的代码var a但是不给赋值，这时才是undefined
+var a = 100
+
+fn('zhangsan')   //函数是自动提升变量
+function fn (name) {
+    console.log(this)
+    console.log(arguments)
+
+    age = 20      //这里是先执行var age ，然后再执行age = 20
+    console.log(name, age)
+    var age
+}
+```
+### 函数声明和函数表达式
+```bash
+//函数声明
+fn()   //正常执行
+function fn () {
+    
+}
+
+//函数表达式，实际上也就是var a = 100形式
+fn1()   //此时报错，因为这是先执行var fn1,但是不给赋值，这时fn1是undefined，所以无法识别为函数
+var fn1 = function () {
+    
+}
+```
+
+## 说明this几种不同的使用场景
+### this原则: this要在执行时才能确认，定义时无法确认
+```bash
+var a = {
+    name: 'A',
+    fn: function () {
+        console.log(this)
+    }
+}
+a.fn()   //this === a
+
+a.fn.call({name: 'B'})   //this === {name: 'B'}
+
+var fn1 = a.fn
+fn1()   //this === window
+```
+出现上面的原因主要是js是解释型语言，不是编译型语言，只有真正执行的时候this才起作用 
+### this作为构造函数执行
+```bash
+function Foo (name) {
+    this.name = name
+    return this //可省略
+}
+
+var f = new Foo('test')
+```
+### 作为对象的属性执行
+```bash
+var obj = {
+    name: 'A',
+    fn: function () {
+        console.log(this.name)
+    }
+}
+```
+### 作为普通函数执行
+```bash
+function fn () {
+    console.log(this)   //指向window
+}
+fn()
+```
+### call apply bind
+```bash
+function fn (name, age) {
+    console.log(this)   //指向{x: 100}
+}
+fn.call({x: 100}, 'zhangdan', 100)
+```
+我博客里面已经总结好，详情请看<a href="https://manlili.github.io/2017/08/10/call-apply-bind/">传送门</a>
+
+
+## 如何理解作用域
+### ES5里面没有块级作用域，只有函数作用域
+```bash
+//全局作用域定义
+var b = 100
+
+//没有块级作用域，下面的name相当于正在全局作用域里面定义的
+if (true) {
+    var name = 'zhangan'
+}
+console.log(name)  //zhangan
+
+//函数作用域
+function fn() {
+    var c = 20
+    console.log('fn', c) // c=20
+}
+fn()
+console.log('全局里面查找C', c)  //报错，c is not defined
+```
+### 自由变量
+定义：当前作用域没有定义的变量
+```bash
+var a = 100
+function fn () {
+    var b = 200
+    
+    console.log(a)   //a = 100,当前作用域没有定义的变量，即"自由变量"
+    console.log(b)   //100
+}
+fn()
+```
+
+### 作用域链
+定义：一个自由变量不断的往父级作用域寻找值的过程,注意这里的父级作用域是变量定义时候的作用域，不是变量执行时候的作用域
+```bash
+var a = 100
+function fn () {
+    var b = 200
+    
+    console.log(a)   //a = 100,当前作用域没有定义的变量，即"自由变量",这时候需要去父级作用域找a,a的父级作用域是全局作用域
+    console.log(b)   //100
+}
+fn()
+
+//再举一个例子
+var a = 100
+function F1() {
+    var b = 200
+    function F2 () {
+        var c = 300
+        console.log(a)   //100
+        console.log(b)   //200
+        console.log(c)   //300
+    }
+    F2()
+}
+F1()
+
+//不断的演变
+var a = 100
+function F1() {
+    var a = 400
+    var b = 200
+    function F2 () {
+        var c = 300
+        console.log(a)   //400
+        console.log(b)   //200
+        console.log(c)   //300
+    }
+    F2()
+}
+F1()
+```
+### 闭包使用的场景也要说，具体见下面
+
+## 什么是闭包
+### 闭包的定义
+关于这个我有一篇博客，详情请看<a href="https://manlili.github.io/2016/04/10/%E9%97%AD%E5%8C%85/">传送门</a>
+### 闭包使用的场景
+- 函数作为返回值
+```bash
+function F1 () {
+    var a = 100
+    
+    //返回一个函数（函数作为返回值）
+    return function () {
+        console.log(a)  //"自由变量",这时候需要去父级作用域找a,a的父级作用域是F1
+    }
+}
+
+//f1得到一个函数
+var f1 = F1()
+var a =200
+f1()  //a=100，a的值是在定义的作用域里面（这里是指F1）找，而不是执行的作用域（这里是指全局）找
+```
+- 函数作为参数传递
+```bash
+function F1 () {
+    var a = 100
+    
+    //返回一个函数（函数作为返回值）
+    return function () {
+        console.log(a)  //"自由变量",这时候需要去父级作用域找a,a的父级作用域是F1
+    }
+}
+
+//f1得到一个函数
+var f1 = F1()
+
+function F2 (fn) {
+    var a = 200
+    fn()
+}
+
+F2(f1)
+```
+
+## 实际开发中闭包的应用
+- 闭包实际应用中主要用于封装变量，收敛权限
+```bash
+function isFirstLoad () {
+    var _list = []  //封装数据源，除了这个函数内部，外面的一律拿不到也改不了_list
+    console.log(arguments)
+    return function (id) {
+        if(_list.indexOf(id) >= 0) {
+            return false
+        }else {
+            _list.push(id)
+            return true
+        }
+    }
+}
+
+var firstLoad = isFirstLoad ()
+
+//注意firstLoad是isFirstLoad()返回的函数
+firstLoad(10)  //true
+firstLoad(10)  //false
+firstLoad(20)  //true
+firstLoad(20)  //false
+```
+
+## 创建10个<a>标签，点击的时候弹出对应的序号
+考点：函数作用域的使用
+```bash
+//下面是错误的写法，是因为创建完不是立马点击，等后面点击的时候i早都到10了并且会一直保持10
+var i , a
+for (i = 0; i < 10; i++) {
+    a = document.createElement('a')
+    a.innerHTML = i + '<br>'
+    a.addEventListener('click', function (e) {
+        e.preventDefault()
+        alert(i)  //自由变量，向父作用域里面找i
+    })
+    document.body.appendChild(a)
+}
+
+//正确的写法
+var i
+for (i = 0; i < 10; i++) {
+    (function(i) {  //新的函数，有自己独立的函数作用域
+        var a = document.createElement('a')
+        a.innerHTML = i + '<br>'
+        a.addEventListener('click', function (e) {
+            e.preventDefault()
+            alert(i) //自由变量，向父作用域里面找i
+        })
+        document.body.appendChild(a)
+    })(i)  //自执行函数
+}
+```
+
 ## 请描述一下cookies，sessionStorage和localStorage的区别？
 sessionStorage和localStorage是HTML5 Web Storage API提供的，可以方便的在web请求之间保存数据。有了本地数据，就可以避免数据在浏览器和服务器间不必要地来回传递。sessionStorage、localStorage、cookie都是在浏览器端存储的数据，其中sessionStorage的概念很特别，引入了一个“浏览器窗口”的概念。sessionStorage是在同源的同窗口（或tab）中，始终存在的数据。也就是说只要这个浏览器窗口没有关闭，即使刷新页面或进入同源另一页面，数据仍然存在。关闭窗口后，sessionStorage即被销毁。同时“独立”打开的不同窗口，即使是同一页面，sessionStorage对象也是不同的cookies会发送到服务器端。其余两个不会。Microsoft指出InternetExplorer8增加cookie限制为每个域名50个，但IE7似乎也允许每个域名50个cookie。
 
