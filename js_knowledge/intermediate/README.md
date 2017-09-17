@@ -186,4 +186,40 @@ var f2 = new Foo ('lisi', 25)   //创建多个对象
 3. 最后将this返回出去，这一步构造函数是默认返回的，可省略，但是面试是要说的
 
 ## zepto(或者其他框架)源码中如何使用原型链
-这个我已经有专门的博客写好了,<a href="https://manlili.github.io/categories/Zepto%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">传送门</a>
+这个我已经有专门的博客写好了,<a href="https://manlili.github.io/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97-zepto/">传送门</a>
+整个zepto的源码架构就是
+```bash
+var Zepto = (function(){
+  var $,
+      zepto = {}  //内部定义的zepto，非外部的Zepto
+  
+  // ...省略N行代码...
+
+  function Z(dom, selector) {
+      var i, len = dom ? dom.length : 0
+      for (i = 0; i < len; i++) this[i] = dom[i]
+      this.length = len
+      this.selector = selector || ''
+  }
+  
+  zepto.init = function(selector, context) {
+      return zepto.Z(dom, selector)
+  }
+  
+  $ = function(selector, context){
+      return zepto.init(selector, context)
+  }
+
+  $.fn = {
+      // ...很多属性...
+  }
+  zepto.Z.prototype = Z.prototype = $.fn
+  
+  // ...省略N行代码...
+  
+  return $
+})()
+
+window.Zepto = Zepto
+window.$ === undefined && (window.$ = Zepto)
+```
