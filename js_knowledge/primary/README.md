@@ -745,7 +745,7 @@ div1.removeChild(child)
 ```
 
 ## DOM节点的property和Attribute有何区别
-- property
+- property  
 js对象的基本属性的获取和修改
 ```bash
 var obj = {x: 100, u: 300}
@@ -754,7 +754,7 @@ console.log(obj.x)  //100
 var p = document.getElementsByName('p')[0]
 console.log(p.nodeName)   //P
 ```
-- Attribute
+- Attribute  
 html标签里面的属性
 ```bash
 var p = document.getElementsByName('p')[0]
@@ -769,7 +769,7 @@ var ua = navigator.userAgent
 var isChrome = ua.indexOf('Chrome')
 var isIos = ua.indexOf('ios')
 ```
-- screen
+- screen  
 屏幕的特性
 ```bash
 screen.width
@@ -804,6 +804,118 @@ location.protocol  //   http:
 location.pathname //  /webapp/index
 location.search  //    ?query=345
 location.hash   // #123
+```
+
+## 描述事件冒泡流程，哪些事件是冒泡的应用？
+### 树形结构
+DOM是树形结构，所以冒泡是从下往上
+### 事件冒泡的使用
+```bash
+//html
+<body>
+    <div id="div1">
+        <p id="p1">激活</p>
+        <p id="p2">激活</p>
+        <p id="p3">激活</p>
+        <p id="p4">激活</p>
+    </div>
+    <div id="div2">
+        <p id="p5">激活</p>
+        <p id="p6">激活</p>
+        <p id="p7">激活</p>
+        <p id="p8">激活</p>
+    </div>
+</body>
+
+//js
+var p1 = document.getElementById('p1')
+var body = document.body
+
+function bindEvent(elem, type, fn) {
+    elem.addEventListener(type, fn) //IE低版本使用的是attachEvent 
+}
+bindEvent(p1, 'click', function (e) {
+    // e.stopPropatation() 阻止冒泡，这个必须要会和面试时候要说
+    alert('激活')
+})
+bindEvent(body, 'click', function (e) {
+    alert('取消')
+})
+
+//最后是先弹出激活，后弹出取消
+```
+### 冒泡的应用-事件代理
+```bash
+//html
+<div id="div1">
+    <a href="#"></a>
+    <a href="#"></a>
+    <a href="#"></a>
+    <a href="#"></a>
+    <a href="#"></a>
+    <!--随时添加更多的a-->
+</div>
+
+//js
+//由于a标签不断的增加，事件不能绑定在a标签里面，但是又想获取a标签的内容，这个时候要考虑冒泡到父节点,z在父节点监听
+var div1 = document.getElementById('div1')
+div1.addEventListener('click', function(e) {
+    var target = e.target
+    if(target.nodeName === 'A') {
+        alert(target.innerHTML)
+    }
+})
+```
+## 事件代理的好处
+- 代码简洁
+- 减少浏览器的内存的占用
+
+## 对于一个无限下拉加载图片的页面，如何给每个图片绑定事件
+使用代理
+
+## 编写一个通用的事件监听函数
+```bash
+//不考虑代理情况下
+function bindEvent(elem, type, fn) {
+    elem.addEventListener(type, fn) //IE低版本使用的是attachEvent 
+}
+var a = document.getElementById('link1')
+bindEvent(a, 'click', function(e) {
+    e.preventDefault()//阻止默认行为
+    alert('clicked')
+})
+
+//通用的事件监听,包含代理和非代理
+function bindEvent(elem, type, selector, fn) {  //selector 被代理的物
+    if (fn == null) {
+        fn = selector
+        selector = null
+    }
+    
+    elem.addEventListener(type, function(e) {
+        var target 
+        if (selector) {
+            target = e.target
+            if (target === 'selector') {
+                fn.call(target, e)
+            }
+        }else {
+            fn(e)
+        }
+    })
+}
+
+//使用代理
+var div1 = document.getElementById('div1')
+bindEvent(div1, 'click', function (e) {
+    console.log(this.innerHTML)   //注意这里的this指的是a标签，不是div1，所以用fn.call(target, e)
+})
+
+//不使用代理
+var a = document.getElementById('a1')
+bindEvent(a, 'click', function (e) {
+    console.log(this.innerHTML)
+})
 ```
 
 ## 请描述一下cookies，sessionStorage和localStorage的区别？
