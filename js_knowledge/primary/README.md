@@ -595,8 +595,67 @@ console.log(5)
 //打印的结果是 1 3 5 2 4
 ```
 
-### 单线程和异步的关系
+## 单线程和异步的关系
 就是是单线程，但是我想一次做多个事情，这个时候就需要暂存起来，就需要异步
+
+## 获取2017-06-10格式的日期
+知识点是Date对象的方法
+```bash
+function formatDate(dt) {
+    if (!dt) {
+        dt = new Date()
+    }
+    var year = dt.getFullYear()
+    var month = dt.getMonth() + 1
+    var date = dt.getDate()
+    
+    if (month < 10) {
+        month = '0' + month
+    }
+    
+    if (date < 10) {
+        date = '0' + date
+    }
+    
+    return year + '-' + month + '-' + date
+}
+
+var dt = new Date()
+formatDate(dt)
+```
+
+## 获取一个随机数，要求是长度一致的字符串格式
+```bash
+var random = Math.random()   //0~1之间的数 0.556822335566
+random = random + '0000000000'   //加10个零
+random = random.slice(1, 10)
+```
+
+## 写一个能遍历对象和数组的通用forEach函数
+```bash
+function likeForEach(obj, fn) {
+    var key
+    if (obj instanceof Array) { //或者Array.isArray(obj)
+        obj.forEach(function (item, index) {  //注意这里必须是先item index
+            fn(index, item)
+        })
+    }else {
+        for (key in obj) {
+            fn(key, obj[key])
+        }
+    }
+}
+
+var arr = [21, 22, 23]
+likeForEach (arr, function (index, item) {
+    console.log(index, item)
+})
+
+var obj = {x: 100, y: 200}
+likeForEach (obj, function (key, value) {
+    console.log(key, value)
+})
+```
 
 ## 请描述一下cookies，sessionStorage和localStorage的区别？
 sessionStorage和localStorage是HTML5 Web Storage API提供的，可以方便的在web请求之间保存数据。有了本地数据，就可以避免数据在浏览器和服务器间不必要地来回传递。sessionStorage、localStorage、cookie都是在浏览器端存储的数据，其中sessionStorage的概念很特别，引入了一个“浏览器窗口”的概念。sessionStorage是在同源的同窗口（或tab）中，始终存在的数据。也就是说只要这个浏览器窗口没有关闭，即使刷新页面或进入同源另一页面，数据仍然存在。关闭窗口后，sessionStorage即被销毁。同时“独立”打开的不同窗口，即使是同一页面，sessionStorage对象也是不同的cookies会发送到服务器端。其余两个不会。Microsoft指出InternetExplorer8增加cookie限制为每个域名50个，但IE7似乎也允许每个域名50个cookie。
