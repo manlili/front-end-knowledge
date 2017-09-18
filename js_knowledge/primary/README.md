@@ -1,6 +1,6 @@
 <!--[TOC]-->
 
-# js面试的初级知识点
+# js初级知识点
 排序不分难易,答案仅供参考
 
 ## 简述js基本数据类型(值类型)和引用数据类型，以及存储在内存哪里？
@@ -65,6 +65,7 @@ if (obj.a == null) {
 - onload，指示页面包含图片等文件在内的所有元素都加载完成。
 
 ## JS中有哪些内置函数,以及每个内置函数对应的方法
+### JS基础知识(ECMA262标准)
 - Array
     - push
     - pop
@@ -146,6 +147,11 @@ if (obj.a == null) {
 - Object
 - Error
 - Function
+### JS-Web-API(W3C标准)
+浏览器中全局函数
+- window
+- document
+- navigator
 
 ## 如何理解JSON
 - JSON是一个简单的JS对象
@@ -657,6 +663,147 @@ var obj = {x: 100, y: 200}
 likeForEach (obj, function (key, value) {
     console.log(key, value)
 })
+```
+## DOM是哪种基本的数据结构？
+### DOM的本质
+全称：document obj model
+```bash
+//xml结构,可以随意自定义标签
+<?xml>
+ <node></node>
+ <other></other>
+</xml>
+
+//html只能用固定的结构
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link href="/test/asset/src/h5/style/global.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+
+  </body>
+</html>
+```
+是由字符串组成的浏览器可识别的树
+
+## DOM操作常用的API有哪些？
+### DOM节点的操作
+- 获取DOM节点
+```bash
+var dom = document.getElementById("div1")  //单体模式
+var list1 = document.getElementsByTagName('p')  //集合模式
+var list2 = document.getElementsByClassName('.ta') //集合模式
+
+var list3 = document.querySelectorAll(css选择器) //集合模式,是上面三种模式的总体书写模式，参数可为#div1, p, .ta
+```
+- 获取Property
+```bash
+var list3 = document.querySelectorAll('p') //集合模式
+var p = list3[0]
+
+//获取样式
+console.log(p.style.width)
+p.style.width = '100px' 
+
+//获取class
+console.log(p.className)
+p.className = "p1"
+
+//获取nodeName
+console.log(p.nodeName)  //p
+
+//获取nodeType
+console.log(p.nodeType)  //1
+```
+### DOM结构操作
+- 新增节点
+```bash
+var p1 = document.createElement('p')
+p1.innerHtml = 'test'
+
+var div1 = document.getElementById('div1')
+div1.appendChild(p1)  //添加在div1里面的最后面，不顶替里面的节点
+```
+- 删除节点
+```bash
+var div1 = document.getElementById('div1')
+var child = div1.childNodes   //集合模式
+div1.removeChild(child)
+```
+- 获取父元素
+```bash
+var div1 = document.getElementById('div1')
+var parent = div1.parentElement
+```
+- 获取子元素
+```bash
+var div1 = document.getElementById('div1')
+var child = div1.childNodes
+div1.removeChild(child)
+```
+
+## DOM节点的property和Attribute有何区别
+- property
+js对象的基本属性的获取和修改
+```bash
+var obj = {x: 100, u: 300}
+console.log(obj.x)  //100
+
+var p = document.getElementsByName('p')[0]
+console.log(p.nodeName)   //P
+```
+- Attribute
+html标签里面的属性
+```bash
+var p = document.getElementsByName('p')[0]
+p.getAttribute('data-name')
+p,getAttributr('style')
+```
+
+## Bom操作
+- navigator
+```bash
+var ua = navigator.userAgent
+var isChrome = ua.indexOf('Chrome')
+var isIos = ua.indexOf('ios')
+```
+- screen
+屏幕的特性
+```bash
+screen.width
+screen.height
+```
+- location
+```bash
+location.href
+location.protocol
+location.pathname
+location.search
+location.hash
+```
+- history
+```bash
+history.back()
+history.forward()
+history.go(2)  //或者-2
+```
+
+## 如何检测浏览器类型
+```bash
+var ua = navigator.userAgent // "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+var isChrome = ua.indexOf('Chrome')
+var isOs = ua.indexOf('OS')
+```
+
+## 解析url的各部分
+```bash
+location.href   //   http://192.168.0.233:3000/webapp/index?query=345#123
+location.protocol  //   http:
+location.pathname //  /webapp/index
+location.search  //    ?query=345
+location.hash   // #123
 ```
 
 ## 请描述一下cookies，sessionStorage和localStorage的区别？
