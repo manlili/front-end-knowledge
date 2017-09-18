@@ -641,7 +641,9 @@ function likeForEach(obj, fn) {
         })
     }else {
         for (key in obj) {
-            fn(key, obj[key])
+            if (obj.hasOwnProperty(key)) {
+                fn(key, obj[key])
+            }
         }
     }
 }
