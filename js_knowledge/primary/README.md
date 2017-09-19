@@ -978,9 +978,9 @@ xhr.send(null)
 
 ## 跨域的几种实现方式
 ### 三个标签允许跨域加载资源
-- <img src=***>
-- <link href=***>
-- <script src=***>
+- ``<img src=***>``
+- ``<link href=***>``
+- ``<script src=***>``
 ### 三个标签的使用场景
 - img标签用于打点统计，统计网站可能是其他域
 - link，script可以使用CDN,CDN的也是其他域
@@ -1050,61 +1050,19 @@ sessionStorage.clear()
 - 注意事项
   - localStorage一般永久存储在本地， sessionStorage只有在窗口打开的时候才会存在，关闭窗口则消失
   - ios safari隐藏模式下两者都会失效， 建议统一用try-catch封装
-  ```bash
-    try {
-      sessionStorage.setItem('private_test', 1);
-    } catch (e) {
-      hasStorage.session = 0;
-    }
-
-    try {
-      localStorage.setItem('private_test', 1);
-    } catch (e) {
-      hasStorage.local = 0;
-    }
-  ```
-
-
-## 关于HTTP请求GET和POST的区别
-1.GET提交，请求的数据会附在URL之后（就是把数据放置在HTTP协议头＜request-line＞中），以?分割URL和传输数据，多个参数用&连接;例如：login.action?name=hyddd&password=idontknow&verify=%E4%BD%A0 %E5%A5%BD。如果数据是英文字母/数字，原样发送，如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如： %E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII。
-
-POST提交：把提交的数据放置在是HTTP包的包体＜request-body＞中。上文示例中红色字体标明的就是实际的传输数据
-因此，GET提交的数据会在地址栏中显示出来，而POST提交，地址栏不会改变
-
-2.传输数据的大小：
-首先声明，HTTP协议没有对传输的数据大小进行限制，HTTP协议规范也没有对URL长度进行限制。 而在实际开发中存在的限制主要有：
-GET:特定浏览器和服务器对URL长度有限制，例如IE对URL长度的限制是2083字节(2K+35)。对于其他浏览器，如Netscape、FireFox等，理论上没有长度限制，其限制取决于操作系统的支持。
-因此对于GET提交时，传输数据就会受到URL长度的限制。
-POST:由于不是通过URL传值，理论上数据不受限。但实际各个WEB服务器会规定对post提交数据大小进行限制，Apache、IIS6都有各自的配置。
-
-3.安全性：
-POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了。
-
-
-## 请解释变量声明提升。
-在JS里定义的变量，存在于作用域链里，而在函数执行时会先把变量的声明进行提升，仅仅是把声明进行了提升，而其值的定义还在原来位置。示例如下：
 ```bash
- var test = function() {
-     console.log(name); // 输出：undefined
-     var name = "jeri";
-     console.log(name); // 输出：jeri
- }
- 
- test();
-```
-上述代码与下述代码等价。
-```bash
- var test = function() {
-     var name;
-     console.log(name); // 输出：undefined
-     name = "jeri";
-     console.log(name); // 输出：jeri
- }
- 
- test();
-```
-由以上代码可知，在函数执行时，把变量的声明提升到了函数顶部，而其值定义依然在原来位置。
+try {
+  sessionStorage.setItem('private_test', 1);
+} catch (e) {
+  hasStorage.session = 0;
+}
 
+try {
+  localStorage.setItem('private_test', 1);
+} catch (e) {
+  hasStorage.local = 0;
+}
+```
 ## 简述AMD、CMD和UMD区别
 Commonjs 在Nodejs服务端上运行，无法在浏览器端运行。为了满足浏览器端模块化的要求，才有了AMD和CMD。
 ### AMD
@@ -1144,116 +1102,15 @@ UMD (Universal Module Definition)，AMD，CommonJS规范是两种不一致的规
 ### Require.js 和Sea.js区别
 Require.js 和Sea.js都是模块加载器，两者的主要区别如下：
 
-- 定位有差异。RequireJS 想成为浏览器端的模块加载器，同时也想成为 Rhino / Node 等环境的模块加载器。Sea.js 则专注于 Web 浏览器端，同时通过 Node 扩展的方式可以很方便跑在 Node 环境中。
-- 遵循的规范不同。RequireJS 遵循 AMD（异步模块定义）规范，Sea.js 遵循 CMD （通用模块定义）规范。规范的不同，导致了两者 API 不同。Sea.js 更贴近 CommonJS Modules/1.1 和 Node Modules 规范。
-- 推广理念有差异。RequireJS 在尝试让第三方类库修改自身来支持 RequireJS，目前只有少数社区采纳。Sea.js 不强推，采用自主封装的方式来“海纳百川”，目前已有较成熟的封装策略。
-- 对开发调试的支持有差异。Sea.js 非常关注代码的开发调试，有 nocache、debug 等用于调试的插件。RequireJS 无这方面的明显支持。
-- 插件机制不同。RequireJS 采取的是在源码中预留接口的形式，插件类型比较单一。Sea.js 采取的是通用事件机制，插件类型更丰富。
-
-## 下面两个函数的返回值是一样的吗？为什么？
-```bash
-function foo1()
-{
-  return {
-      bar: "hello"
-  };
-}
- 
-function foo2()
-{
-  return
-  {
-      bar: "hello"
-  };
-}
-```
-在编程语言中，基本都是使用分号（;）将语句分隔开，这可以增加代码的可读性和整洁性。而在JS中，如若语句各占独立一行，通常可以省略语句间的分号（;），JS 解析器会根据能否正常编译来决定是否自动填充分号：
-```bash
-var test = 1 + 2;
-console.log(test);  //3
-```
-在上述情况下，为了正确解析代码，就不会自动填充分号了，但是对于 return 、break、continue 等语句，如果后面紧跟换行，解析器一定会自动在后面填充分号(;)，所以上面的第二个函数就变成了这样：
-```bash
-function foo2()
-{
-  return;
-  {
-      bar: "hello"
-  };
-}
-```
-所以第二个函数是返回 undefined。
-
-## 使用 typeof bar === “object” 判断 bar 是不是一个对象有什么潜在的弊端？如何避免这种弊端？
-使用 typeof 的弊端是显而易见的(这种弊端同使用 instanceof)：
-```bash
-let obj = {};
-let arr = [];
- 
-console.log(typeof obj === 'object');  //true
-console.log(typeof arr === 'object');  //true
-console.log(typeof null === 'object');  //true
-```
-从上面的输出结果可知，typeof bar === “object” 并不能准确判断 bar 就是一个 Object。可以通过 Object.prototype.toString.call(bar) === “[object Object]” 来避免这种弊端：
-```bash
-let obj = {};
-let arr = [];
- 
-console.log(Object.prototype.toString.call(obj));  //[object Object]
-console.log(Object.prototype.toString.call(arr));  //[object Array]
-console.log(Object.prototype.toString.call(null));  //[object Null]
-```
-另外，为了珍爱生命，请远离 ==： 
-珍爱生命
-而 [] === false 是返回 false 的。
-
-## 下面的代码会在 console 输出什么？为什么？
-```bash
-(function(){
-  var a = b = 3;
-})();
- 
-console.log("a defined? " + (typeof a !== 'undefined'));   
-console.log("b defined? " + (typeof b !== 'undefined'));
-```
-这跟变量作用域有关，输出换成下面的：
-```bash
-console.log(b); //3
-console,log(typeof a); //undefined
-```
-拆解一下自执行函数中的变量赋值：
-```bash
-b = 3;
-var a = b;
-```
-所以 b 成了全局变量，而 a 是自执行函数的一个局部变量。
-
-## 下面的代码会在 console 输出什么？为什么？
-```bash
-var myObject = {
-    foo: "bar",
-    func: function() {
-        var self = this;
-        console.log("outer func:  this.foo = " + this.foo);
-        console.log("outer func:  self.foo = " + self.foo);
-        (function() {
-            console.log("inner func:  this.foo = " + this.foo);
-            console.log("inner func:  self.foo = " + self.foo);
-        }());
-    }
-};
-myObject.func();
-```
-第一个和第二个的输出不难判断，在 ES6 之前，JavaScript 只有函数作用域，所以 func 中的 IIFE 有自己的独立作用域，并且它能访问到外部作用域中的 self，所以第三个输出会报错，因为 this 在可访问到的作用域内是 undefined，第四个输出是 bar。如果你知道闭包，也很容易解决的：
-```bash
-(function(test) {
-  console.log("inner func:  this.foo = " + test.foo);  //'bar'
-  console.log("inner func:  self.foo = " + self.foo);
-}(self));
-```
+- 定位有差异  
+RequireJS 想成为浏览器端的模块加载器，同时也想成为 Rhino / Node 等环境的模块加载器。Sea.js 则专注于 Web 浏览器端，同时通过 Node 扩展的方式可以很方便跑在 Node 环境中。
+- 遵循的规范不同  
+RequireJS 遵循 AMD（异步模块定义）规范，Sea.js 遵循 CMD 
 
 ## 将 JavaScript 代码包含在一个函数块中有什么意思呢？为什么要这么做？
 换句话说，为什么要用立即执行函数表达式（Immediately-Invoked Function Expression）。
+我已经有博客写过这方面的文章,详情请见[传送门](https://manlili.github.io/2016/05/24/%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0IIFE/)  
+
 IIFE 有两个比较经典的使用场景，一是类似于在循环中定时输出数据项，二是类似于 JQuery/Node 的插件和模块开发。
 ```bash
 for(var i = 0; i < 5; i++) {
@@ -1286,11 +1143,4 @@ for(var i = 0; i < 5; i++) {
 - 行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模
 
 ## 简述JS深浅拷贝的原理及项目应用
-[答案我已总结出来，点击查看参考地址](https://manlili.github.io/2017/04/17/JS%E7%9A%84%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D%E7%A0%94%E7%A9%B6/)
-
-## 写出下面的输出结果
-```bash
-var p = new Promise((resolve, reject)=> {reject()}).then(()=>{console.info('resolve1')}, ()=>{console.info('reject1')})
-p.then(()=>{console.info('resolve2')}, ()=>{console.info('reject2')})
-```
-输出结果reject1, resolve2
+我已经有博客写过这方面的文章,详情请见[传送门](https://manlili.github.io/2017/04/17/JS%E7%9A%84%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D%E7%A0%94%E7%A9%B6/)
