@@ -1018,6 +1018,52 @@ response.setHeader('Access-Control-Allow-Credentials', 'true')
 </script>
 ```
 
+## 描述一下cookie, sessionStorage, localStorage的区别
+### cookie
+- 本身用于客户端和服务器端通信
+- 但是它有本地存储的功能，于是被"借用"
+- 使用方法
+```bash
+document.cookie = 获取或者修改内容
+```
+- cookie用于存储的缺点
+  - 存储量太小，只有4KB
+  - 所有的http请求都要携带，会影响获取资源的效率
+  - api过于简单，需要封装才能用，比如需要存姓名，性别等大量的信息
+### sessionStorage, localStorage
+- HTML5专门为存储而设计，最大容量是5M
+- 不用携带进http请求中
+- API简单易用
+```bash
+//localStorage
+localStorage.setItem(key, value)
+localStorage.getItem(key)
+localStorage.removeItem(key)
+localStorage.clear()
+
+//sessionStorage
+sessionStorage.setItem(key, value)
+sessionStorage.getItem(key)
+sessionStorage.removeItem(key)
+sessionStorage.clear()
+```
+- 注意事项
+  - localStorage一般永久存储在本地， sessionStorage只有在窗口打开的时候才会存在，关闭窗口则消失
+  - ios safari隐藏模式下两者都会失效， 建议统一用try-catch封装
+  ```bash
+    try {
+      sessionStorage.setItem('private_test', 1);
+    } catch (e) {
+      hasStorage.session = 0;
+    }
+
+    try {
+      localStorage.setItem('private_test', 1);
+    } catch (e) {
+      hasStorage.local = 0;
+    }
+  ```
+
 
 ## 关于HTTP请求GET和POST的区别
 1.GET提交，请求的数据会附在URL之后（就是把数据放置在HTTP协议头＜request-line＞中），以?分割URL和传输数据，多个参数用&连接;例如：login.action?name=hyddd&password=idontknow&verify=%E4%BD%A0 %E5%A5%BD。如果数据是英文字母/数字，原样发送，如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如： %E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII。
@@ -1033,12 +1079,6 @@ POST:由于不是通过URL传值，理论上数据不受限。但实际各个WEB
 
 3.安全性：
 POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了。
-
-
-##  js深度复制的方式
-1、使用jq的$.extend(true, target, obj)   
-2、newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj   
-3、newobj = JSON.parse(JSON.stringify(sourceObj))     
 
 
 ## 请解释变量声明提升。
