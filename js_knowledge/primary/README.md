@@ -4,11 +4,11 @@
 排序不分难易,答案仅供参考
 
 ## 简述js基本数据类型(值类型)和引用数据类型，以及存储在内存哪里？
-## 基本数据类型
+### 基本数据类型
 - Undefined、Null、Boolean、Number和String
 - 基本型数据存在栈中  
 - 特点：由于每个变量都需要自己的内存空间，所以占用的空间比较大
-## 引用数据类型
+### 引用数据类型
 - Object、Array和Function
 - 引用型数据引用地址存在栈中，而实体对象存在堆中
 - 特点：共用相同的内存空间
@@ -797,13 +797,28 @@ var isChrome = ua.indexOf('Chrome')
 var isOs = ua.indexOf('OS')
 ```
 
-## 解析url的各部分
+## 解析url的各部分api有哪些
 ```bash
 location.href   //   http://192.168.0.233:3000/webapp/index?query=345#123
 location.protocol  //   http:
 location.pathname //  /webapp/index
 location.search  //    ?query=345
 location.hash   // #123
+```
+## 你如何从浏览器的URL中获取查询字符串参数。
+```bash
+function parseQueryString ( name ){
+  name = name.replace(/[\[]/,"\\\[");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+
+  if(results == null) {
+      return "";
+  } else {
+   return results[1];
+  }
+}
 ```
 
 ## 描述事件冒泡流程，哪些事件是冒泡的应用？
@@ -917,15 +932,92 @@ bindEvent(a, 'click', function (e) {
     console.log(this.innerHTML)
 })
 ```
+## 请描述下事件冒泡和事件捕获机制。
+- 冒泡型事件：事件按照从最特定的事件目标到最不特定的事件目标(document对象)的顺序触发。
+- 捕获型事件：事件从最不精确的对象(document对象)开始触发，然后到最精确(也可以在窗口级别捕获事件，不过必须由开发人员特别指定)。
 
-## 请描述一下cookies，sessionStorage和localStorage的区别？
-sessionStorage和localStorage是HTML5 Web Storage API提供的，可以方便的在web请求之间保存数据。有了本地数据，就可以避免数据在浏览器和服务器间不必要地来回传递。sessionStorage、localStorage、cookie都是在浏览器端存储的数据，其中sessionStorage的概念很特别，引入了一个“浏览器窗口”的概念。sessionStorage是在同源的同窗口（或tab）中，始终存在的数据。也就是说只要这个浏览器窗口没有关闭，即使刷新页面或进入同源另一页面，数据仍然存在。关闭窗口后，sessionStorage即被销毁。同时“独立”打开的不同窗口，即使是同一页面，sessionStorage对象也是不同的cookies会发送到服务器端。其余两个不会。Microsoft指出InternetExplorer8增加cookie限制为每个域名50个，但IE7似乎也允许每个域名50个cookie。
+## ajax的状态码有哪些?
+### readyState状态码
+- 0 （未初始化）还没有调用send()方法 
+- 1 （载入）已调用send()方法，正在发送请求 
+- 2 （载入完成）send()方法执行完成，已经接收到全部响应内容 
+- 3 （交互）正在解析响应内容 
+- 4 （完成）响应内容解析完成，可以在客户端调用了 
+### status状态码
+- 2xx 表示成功处理请求 如200，请求成功
+- 3xx 需要重定向，浏览器直接跳转  如305使用代理，被请求的资源必须通过指定的代理才能被访问
+- 4xx 客户端错误 如404 找不到对象。请求失败，资源不存在
+- 5xx 服务器端错误
 
-Firefox每个域名cookie限制为50个。
-Opera每个域名cookie限制为30个。
-Firefox和Safari允许cookie多达4097个字节，包括名（name）、值（value）和等号。
-Opera允许cookie多达4096个字节，包括：名（name）、值（value）和等号。
-InternetExplorer允许cookie多达4095个字节，包括：名（name）、值（value）和等号。
+## 手动写一个ajax，不依赖第三方库
+```bash
+var xhr = new XMLHttpRequest()
+xhr.open('GET', '/API', false)
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+            alert(xhr.responseText)
+        }
+    }
+}
+xhr.send(null)
+```
+## 什么是跨域
+- 定义
+浏览器有同源的策略，不容许ajax访问其他域接口
+- 跨域的条件  
+协议  
+域名   
+端口  
+- 举例  
+你的网站：http://www.yourname.com:80/page1.html  
+你要访问的网站: https://www.source.com:443/gateway/home/getHomeData  
+上面例子的协议  比如https， http  
+上面例子的域名  比如www.yourname.com 和 www.source.com  
+上面例子的端口  比如80 和443
+
+## 跨域的几种实现方式
+### 三个标签允许跨域加载资源
+- <img src=***>
+- <link href=***>
+- <script src=***>
+### 三个标签的使用场景
+- img标签用于打点统计，统计网站可能是其他域
+- link，script可以使用CDN,CDN的也是其他域
+- script可以用于JSONP
+### 服务器端设置http header
+另外一个解决跨域的简洁方法，需要服务器端来，前端需要了解
+```bash
+//第二个参数是允许跨域的域名城，*代表全部都允许跨域
+response.setHeader('Access-Control-Allow-Origin', 'https://a.com', 'http://a.com')
+response.setHeader('Access-Control-Allow-Origin', *)
+
+//接受跨域的cookie
+response.setHeader('Access-Control-Allow-Credentials', 'true')
+```
+### 跨域注意事项
+- 所有的跨域请求都必须经过信息提供方的允许
+- 如果未经允许即可获取信息，那么就是浏览器的同源策略出了问题
+
+## 什么是JSONP
+### JSOP实现跨域的前提
+- 加载http://www.baidu.com:80/page1.html 
+- 服务器端不一定有page1.html，可能是服务器端根据你的请求动态拼接起来的
+- 同理，如果我请求的是http://www.baidu.com:80/api.js，这个js也不一定存在，也可能是服务器动态拼接的
+- 那么我们就可以使用<script src="http://www.baidu.com:80/api.js">,拿到api.js里面的内容进行处理
+### JSOP实现的原理
+- 假设A网站用script标签src向B网站发送了请求，B只需要将A所需要的数据放在api.js，数据格式为A,B协商的格式，比如{a: 10, b: 20},A拿到数据后直接处理就可以了
+- 实现的源码
+```bash
+<script src = "http://www.baidu.com:80/api.js"></script>
+<script>
+   window.callback = function (data) {
+        //这是我们跨域得到的信息
+        console.log(data)  //{a: 10, b: 20}
+   }
+</script>
+```
+
 
 ## 关于HTTP请求GET和POST的区别
 1.GET提交，请求的数据会附在URL之后（就是把数据放置在HTTP协议头＜request-line＞中），以?分割URL和传输数据，多个参数用&连接;例如：login.action?name=hyddd&password=idontknow&verify=%E4%BD%A0 %E5%A5%BD。如果数据是英文字母/数字，原样发送，如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如： %E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII。
@@ -942,36 +1034,12 @@ POST:由于不是通过URL传值，理论上数据不受限。但实际各个WEB
 3.安全性：
 POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了。
 
-## js跨域请求的方式，能写几种是几种
-1、通过jsonp跨域   
-2、通过修改document.domain来跨子域     
-3、使用window.name来进行跨域     
-4、使用HTML5中新引进的window.postMessage方法来跨域传送数据（ie 67 不支持）   
-5、CORS 需要服务器设置header ：Access-Control-Allow-Origin。  
-6、nginx反向代理 这个方法一般很少有人提及，但是他可以不用目标服务器配合，不过需要你搭建一个中转nginx服务器，用于转发请求   
-
-## 请解释JSONP的工作原理，以及它为什么不是真正的AJAX。
-JSONP (JSON with Padding)是一个简单高效的跨域方式，HTML中的script标签可以加载并执行其他域的javascript，于是我们可以通过script标记来动态加载其他域的资源。例如我要从域A的页面pageA加载域B的数据，那么在域B的页面pageB中我以JavaScript的形式声明pageA需要的数据，然后在 pageA中用script标签把pageB加载进来，那么pageB中的脚本就会得以执行。JSONP在此基础上加入了回调函数，pageB加载完之后会执行pageA中定义的函数，所需要的数据会以参数的形式传递给该函数。JSONP易于实现，但是也会存在一些安全隐患，如果第三方的脚本随意地执行，那么它就可以篡改页面内容，截获敏感数据。但是在受信任的双方传递数据，JSONP是非常合适的选择。
-
-AJAX是不跨域的，而JSONP是一个是跨域的，还有就是二者接收参数形式不一样！
 
 ##  js深度复制的方式
 1、使用jq的$.extend(true, target, obj)   
 2、newobj = Object.create(sourceObj)，// 但是这个是有个问题就是 newobj的更改不会影响到 sourceobj但是 sourceobj的更改会影响到newObj   
 3、newobj = JSON.parse(JSON.stringify(sourceObj))     
 
-## 请描述下事件冒泡和事件捕获机制。
-- 冒泡型事件：事件按照从最特定的事件目标到最不特定的事件目标(document对象)的顺序触发。
-- 捕获型事件：事件从最不精确的对象(document 对象)开始触发，然后到最精确(也可以在窗口级别捕获事件，不过必须由开发人员特别指定)。
-
-## 什么是闭包，如何使用它，为什么要使用它？
-闭包就是能够读取其他函数内部变量的函数。由于在Javascript语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成“定义在一个函数内部的函数”。
-所以，在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。闭包可以用在许多地方。它的最大用处有两个，一个是前面提到的可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。
-
-### 使用闭包的注意点
-由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。
-闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。 
-（关于闭包，详细了解请看JavaScript之作用域与闭包详解）
 
 ## 请解释变量声明提升。
 在JS里定义的变量，存在于作用域链里，而在函数执行时会先把变量的声明进行提升，仅仅是把声明进行了提升，而其值的定义还在原来位置。示例如下：
@@ -1171,90 +1239,6 @@ for(var i = 0; i < 5; i++) {
  } )(jQuery);
 ```
 
-## 请指出JavaScript宿主对象和原生对象的区别？
-### 原生对象
-ECMA-262 把本地对象（native object）定义为“独立于宿主环境的 ECMAScript 实现提供的对象”。
-“本地对象”包含哪些内容：Object、Function、Array、String、Boolean、Number、Date、RegExp、Error、EvalError、RangeError、ReferenceError、SyntaxError、TypeError、URIError。
-由此可以看出，简单来说，本地对象就是 ECMA-262 定义的类（引用类型）。
-
-### 内置对象
-ECMA-262 把内置对象（built-in object）定义为“由 ECMAScript 实现提供的、独立于宿主环境的所有对象，在 ECMAScript 程序开始执行时出现”。这意味着开发者不必明确实例化内置对象，它已被实例化了。
-同样是“独立于宿主环境”。根据定义我们似乎很难分清“内置对象”与“本地对象”的区别。而ECMA-262 只定义了两个内置对象，即 Global 和 Math （它们也是本地对象，根据定义，每个内置对象都是本地对象）。如此就可以理解了。内置对象是本地对象的一种。
-
-### 宿主对象
-何为“宿主对象”？主要在这个“宿主”的概念上，ECMAScript中的“宿主”当然就是我们网页的运行环境，即“操作系统”和“浏览器”。
-所有非本地对象都是宿主对象（host object），即由 ECMAScript 实现的宿主环境提供的对象。所有的BOM和DOM都是宿主对象。因为其对于不同的“宿主”环境所展示的内容不同。其实说白了就是，ECMAScript官方未定义的对象都属于宿主对象，因为其未定义的对象大多数是自己通过ECMAScript程序创建的对象。
-
-## call和.apply的区别是什么？
-### call方法 
-语法：call(thisObj，Object) 
-定义：调用一个对象的一个方法，以另一个对象替换当前对象。 
-说明：call 方法可以用来代替另一个对象调用一个方法。call 方法可将一个函数的对象上下文从初始的上下文改变为由 thisObj 指定的新对象。 如果没有提供 thisObj 参数，那么 Global 对象被用作 thisObj。 
-### apply方法 
-语法：apply(thisObj，[argArray]) 
-定义：应用某一对象的一个方法，用另一个对象替换当前对象。 
-说明：如果 argArray 不是一个有效的数组或者不是 arguments 对象，那么将导致一个 TypeError。如果没有提供 argArray 和 thisObj 任何一个参数，那么 Global 对象将被用作 thisObj， 并且无法被传递任何参数。
-
-对于apply和call两者在作用上是相同的，但两者在参数上有以下区别： 
-对于第一个参数意义都一样，但对第二个参数：apply传入的是一个参数数组，也就是将多个参数组合成为一个数组传入，而call则作为call的参数传入（从第二个参数开始）。如 func.call(func1,var1,var2,var3)对应的apply写法为：func.apply(func1,[var1,var2,var3])同时使用apply的好处是可以直接将当前函数的arguments对象作为apply的第二个参数传入。
-
-## ”attribute”和”property”的区别是什么？
-1.定义
-Property：属性，所有的HTML元素都由HTMLElement类型表示，HTMLElement类型直接继承自Element并添加了一些属性，添加的这些属性分别对应于每个HTML元素都有下面的这5个标准特性: id,title,lang,dir,className。DOM节点是一个对象，因此，他可以和其他的JavaScript对象一样添加自定义的属性以及方法。property的值可以是任何的数据类型，对大小写敏感，自定义的property不会出现在html代码中，只存在js中。
-
-Attribute：特性，区别于property，attribute只能是字符串，大小写不敏感，出现在innerHTML中，通过类数组attributes可以罗列所有的attribute。
-
-2.相同之处
-标准的 DOM properties 与 attributes 是同步的。公认的（非自定义的）特性会被以属性的形式添加到DOM对象中。如，id，align，style等，这时候操作property或者使用操作特性的DOM方法如getAttribute()都可以操作属性。不过传递给getAttribute()的特性名与实际的特性名相同。因此对于class的特性值获取的时候要传入“class”。
-
-3.不同之处
-1).对于有些标准的特性的操作，getAttribute与点号(.)获取的值存在差异性。如href，src，value，style，onclick等事件处理程序。 
-2).href：getAttribute获取的是href的实际值，而点号获取的是完整的url，存在浏览器差异。
-
-## 你如何从浏览器的URL中获取查询字符串参数。
-```bash
-function parseQueryString ( name ){
-  name = name.replace(/[\[]/,"\\\[");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( window.location.href );
-
-  if(results == null) {
-      return "";
-  } else {
-   return results[1];
-  }
-}
-```
-
-## 请解释一下JavaScript的同源策略。
-在客户端编程语言中，如javascript和 ActionScript，同源策略是一个很重要的安全理念，它在保证数据的安全性方面有着重要的意义。同源策略规定跨域之间的脚本是隔离的，一个域的脚本不能访问和操作另外一个域的绝大部分属性和方法。那么什么叫相同域，什么叫不同的域呢？当两个域具有相同的协议, 相同的端口，相同的host，那么我们就可以认为它们是相同的域。同源策略还应该对一些特殊情况做处理，比如限制file协议下脚本的访问权限。本地的HTML文件在浏览器中是通过file协议打开的，如果脚本能通过file协议访问到硬盘上其它任意文件，就会出现安全隐患，目前IE8还有这样的隐患。
-
-## 解释”chaining”。
-jQuery方法链接。直到现在，我们都是一次写一条jQuery语句（一条接着另一条）。不过，有一种名为链接（chaining）的技术，允许我们在相同的元素上运行多条jQuery命令，一条接着另一条。
-提示：这样的话，浏览器就不必多次查找相同的元素。
-如需链接一个动作，您只需简单地把该动作追加到之前的动作上。
-
-## 解释”deferreds”。
-开发网站的过程中，我们经常遇到某些耗时很长的javascript操作。其中，既有异步的操作（比如ajax读取服务器数据），也有同步的操作（比如遍历一个大型数组），它们都不是立即能得到结果的。
-通常的做法是，为它们指定回调函数（callback）。即事先规定，一旦它们运行结束，应该调用哪些函数。
-但是，在回调函数方面，jQuery的功能非常弱。为了改变这一点，jQuery开发团队就设计了deferred对象。
-简单说，deferred对象就是jQuery的回调函数解决方案。在英语中，defer的意思是”延迟”，所以deferred对象的含义就是”延迟”到未来某个点再执行。
-
-## 你如何给一个事件处理函数命名空间，为什么要这样做？
-任何作为type参数的字符串都是合法的；如果一个字符串不是原生的JavaScript事件名，那么这个事件处理函数会绑定到一个自定义事件上。这些自定义事件绝对不会由浏览器触发，但可以通过使用.trigger()或者.triggerHandler()在其他代码中手动触发。如果type参数的字符串中包含一个点(.)字符，那么这个事件就看做是有命名空间的了。这个点字符就用来分隔事件和他的命名空间。举例来说，如果执行.bind(‘click.name’,handler)，那么字符串中的click是事件类型，而字符串name就是命名空间。命名空间允许我们取消绑定或者触发一些特定类型的事件，而不用触发别的事件。参考unbind()来获取更多信息。
-
-jQuery的bind/unbind方法应该说使用很简单，而且大多数时候可能并不会用到，取而代之的是直接用click/keydown之类的事件名风格的方法来做事件绑定操作。
-
-但假设如下情况：需要在运行时根据用户交互的结果进行不同click事件处理逻辑的绑定，因而理论上会无数次对某一个事件进行bind/unbind操作。但又希望unbind的时候只把自己绑上去的处理逻辑给释放掉而不是所有其他地方有可能的额外的同一事件绑定逻辑。这时候如果直接用.click()/.bind(‘click’)加上.unbind(‘click’)来进行重复绑定的话，被unbind掉的将是所有绑定在元素上的click处理逻辑，潜在会影响到该元素其他第三方的行为。
-
-当然如果在bind的时候是显示定义了function变量的话，可以在unbind的时候提供function作为第二个参数来指定只unbind其中一个处理逻辑，但实际应用中很可能会碰到各种进行匿名函数绑定的情况。对于这种问题，jQuery的解决方案是使用事件绑定的命名空间。即在事件名称后添加.something来区分自己这部分行为逻辑范围。
-
-比如用.bind(‘click.myCustomRoutine’,function(){…});同样是把匿名函数绑定到click事件（你可以用自己的命名空间多次绑定不同的行为方法上去），当unbind的时候用.unbind(‘click.myCustomRoutine’)即可释放所有绑定到.myCustomRoutine命名空间的click事件，而不会解除其他通过.bind(‘click’)或另外的命名空间所绑定的事件行为。同时，使用命令空间还可以让你一次性unbind所有此命名空间下的自定义事件绑定，通过.unbind(‘.myCustomRoutine’)即可。要注意的是，jQuery的命名空间并不支持多级空间。
-
-因为在jQuery里面，如果用.unbind(‘click.myCustomRoutine.myCustomSubone’)，解除的是命名空间分别为myCustomRoutine和myCustomSubone的两个并列命名空间下的所有click事件，而不是”myCustomRoutine下的myCustomSubone子空间”。
-
-
 ## 简述常见js设计模式
 总体来说设计模式分为三大类：
 - 创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
@@ -1270,17 +1254,3 @@ var p = new Promise((resolve, reject)=> {reject()}).then(()=>{console.info('reso
 p.then(()=>{console.info('resolve2')}, ()=>{console.info('reject2')})
 ```
 输出结果reject1, resolve2
-
-## 请解释Function.prototype.bind的作用,如果浏览器不支持Function.prototype.bind特性，请实现一个让浏览器支持？
-
-## 解释“JavaScript模块模式”以及你在何时使用它？
-
-## 请尽可能详尽的解释AJAX的工作原理？
-
-## 你能解释一下JavaScript中的继承是如何工作的吗？
-
-## 为什么扩展JavaScript内置对象不是好的做法？
-
-## 描述一种JavaScript中实现memoization(避免重复运算)的策略。
-
-## 解释ES6中Promise
