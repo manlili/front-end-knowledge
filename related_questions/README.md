@@ -187,5 +187,57 @@ git log -S "代码细节"
 只需要DOM加载完便可，此时的图片，视频或者字体等异步资源可能还没加载完
 
 ## 页面性能优化
+### 优化的原则
+- 多使用内存、缓存或者其他方法
+- 减少CPU计算，减少请求
+### 优化的入口
+- 加载页面和静态资源
+- 页面渲染
+### 加载资源的优化
+- 静态资源的压缩合并 js css img  比如webpack
+- 静态资源缓存 一般浏览器都有自己的缓存，比如文件的名字没变，浏览器都不再去请求 比如mainfestion
+- 使用CDN让资源加载更快  让CDN最近的机房给你返回结果
+- 使用SSR后端渲染，数据直接输入到HTML   比如接口直接返回css，js，html
+### 渲染优化
+- css放前面，js放后面
+- 懒加载（图片懒加载，下拉加载更多）
+下面来讲下图片懒加载的原理
+```bash
+<img class="img1" src data-img="abc.png" />
+<script>
+ var img1 = document.getElementById('img1')
+ img1.src = img1.getAttribute('date-img')
+</script>
+```
+- 减少DOM查询，对DOM查询作缓存
+```bash
+//DOM查询无缓存
+var i
+for (i = 0; i< document.getElementsByTagName('p').length; i++) {
+}
+
+//DOM查询有缓存
+var i
+var pList = document.getElementsByTagName('p')
+for (i = 0; i< pList.length; i++) {
+}
+```
+- 减少DOM操作，比如插入10个数据，先造好数据再一起插入
+- 事件节流
+```bash
+//-.throttle原理
+var textarea = document.getElementById('map')
+var timeoutId
+textarea.addEventListener('drag', function () {
+   if (timeoutId) {
+   	clearTimeout(timeoutId)
+   }
+   
+   timeoutId = setTimout(function () {
+   	//change事件
+   }, 100)
+})
+```
+- 尽早执行操作（DOMContentLoaded）
 
 ## 怎么保证程序的安全性
