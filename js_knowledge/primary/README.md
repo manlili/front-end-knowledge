@@ -1063,42 +1063,6 @@ try {
   hasStorage.local = 0;
 }
 ```
-## 简述AMD、CMD和UMD区别
-Commonjs 在Nodejs服务端上运行，无法在浏览器端运行。为了满足浏览器端模块化的要求，才有了AMD和CMD。
-### AMD
-AMD (Asynchronous Module Definition)是 RequireJS 在推广过程中对模块定义的规范化产出。对于依赖的模块，AMD 是提前执行。AMD 推崇依赖前置，把依赖参数以数组形式保存在前半部分。使用规则如下：
-```bash
-define(id?, dependencies?, factory);
-```
-### CMD
-CMD (Common Module Definition)是 Seajs 在推广过程中对模块定义的规范化产出。 CMD 是延迟执行，CMD 推崇依赖就近，使用规则如下：
-```bash
-define(function(require, exports, module) {
-  // 模块代码
-});
-```
-### UMD
-UMD (Universal Module Definition)，AMD，CommonJS规范是两种不一致的规范，虽然他们应用的场景也不太一致，但是人们仍然是期望有一种统一的规范来支持这两种规范，对两种情况进行判断，UMD兼容两个规范。
-```bash
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node, CommonJS-like
-        module.exports = factory(require('jquery'));
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.jQuery);
-    }
-}(this, function ($) {
-    //    methods
-    function myFunc(){};
-
-    //    exposed public method
-    return myFunc;
-}));
-```
 ### Require.js 和Sea.js区别
 Require.js 和Sea.js都是模块加载器，两者的主要区别如下：
 

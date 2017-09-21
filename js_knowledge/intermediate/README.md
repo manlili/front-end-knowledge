@@ -254,3 +254,124 @@ var Zepto = (function(){
 window.Zepto = Zepto
 window.$ === undefined && (window.$ = Zepto)
 ```
+## 模块化
+### 不使用模块化
+- 假设有三个文件
+  - util.js 最基础的外部框架，里面有个getFormatDate()
+  - a-util.js 相当于业务框架里面又对util底层框架封装了一次 是将util.getFormatDate()封装成aGetFormatDate()
+  - a.js 也就是业务里面使用的具体js，里面使用的是a-util.js封装好的aGetFormatDate()
+```bash
+//util.js里面的内容
+function getFormatDate(date, type) {
+    //type === 1 返回2017-06-05
+    //type === 2 返回2017年6月15日
+    // ...
+}
+
+//a-util.js
+function aGetFormatDate(date) {
+    //要求返回2017年6月15日这种格式
+    return getFormatDate(date, 2)
+}
+
+//a.js
+var dt = new Date()
+console.log(aGetformatDate(dt))
+
+
+//html中使用
+<script src = 'util.js'> </script>
+<script src = 'a-util.js'> </script>
+<script src = 'a.js'> </script>
+```
+上面代码在html使用的时候注意事项
+- 三个js使用的顺序，必须先util.js， 中间调a-util.js， 最后a.js
+- 这三个文件中的函数必须是全局变量，才能暴露给使用方，这样会产生全局变量的污染
+- a.js依赖于a-util.js,但是它不知道还需要依赖于util.js,因为业务开发者和框架人员不一定是同一个人，这时候就需要出现模块化
+
+### 使用模块化
+- 假设有三个文件
+  - util.js 最基础的外部框架，里面有个getFormatDate()
+  - a-util.js 相当于业务框架里面又对util底层框架封装了一次 是将util.getFormatDate()封装成aGetFormatDate()
+  - a.js 也就是业务里面使用的具体js，里面使用的是a-util.js封装好的aGetFormatDate()
+下面来说一下实现的原理，注意是伪代码书写的
+```bash
+//util.js里面的内容
+export {
+    getFormatDate: function(date, type) {
+        //type === 1 返回2017-06-05
+        //type === 2 返回2017年6月15日
+        // ...
+    }
+}
+
+//a-util.js
+var getFormatDate = require('util.js')
+export {
+    aGetFormatDate: function (date) { 
+        //要求返回2017年6月15日这种格式
+        return getFormatDate(date, 2)
+    }
+}
+
+//a.js
+var aGetFormatDate = require('aGetFormatDate')
+var dt = new Date()
+console.log(aGetformatDate(dt))
+
+//html中使用
+<script src = 'util.js'> </script>
+<script src = 'a-util.js'> </script>
+<script src = 'a.js'> </script>
+```
+上面代码在html使用的时候注意事项
+- 三个js使用的顺序，必须先util.js， 中间调a-util.js， 最后a.js
+- 这三个文件中的函数不是全局函数，只需要用export暴露出需要的函数
+- 从上面可以很清楚的看到a.js依赖于a-util.js,a-util.js依赖于util.js
+
+关于AMD具体编程使用的是require.js实现的，具体代码可见[传送门](https://github.com/manlili/AMD-CMD)
+
+## 简述AMD、CMD和UMD区别
+Commonjs 在Nodejs服务端上运行，无法在浏览器端运行。为了满足浏览器端模块化的要求，才有了AMD和CMD。
+### AMD
+AMD (Asynchronous Module Definition)是 RequireJS 在推广过程中对模块定义的规范化产出。特点是异步加载。AMD 推崇依赖前置，把依赖参数以数组形式保存在前半部分。使用规则如下：
+```bash
+define(id?, dependencies?, factory);
+```
+
+关于AMD典型实例编程使用的是require.js实现的
+- 使用场景是: 异步加载JS
+- 具体代码可见[传送门](https://github.com/manlili/AMD-CMD)
+### CMD
+CMD (Common Module Definition)是seaJs在推广过程中对模块定义的规范化产出。它不会异步加载js，而是同步一次性加载出来，使用规则如下：
+```bash
+define(function(require, exports, module) {
+  // 模块代码
+});
+```
+
+关于CMD典型实例编程使用的是commonJs
+- 它是nodeJs模块化的规范，现在被大量的前端使用
+- 使用场景是：使用了npm之后建议使用commonJs
+### UMD
+UMD (Universal Module Definition)，AMD，CommonJS规范是两种不一致的规范，虽然他们应用的场景也不太一致，但是人们仍然是期望有一种统一的规范来支持这两种规范，对两种情况进行判断，UMD兼容两个规范。
+```bash
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node, CommonJS-like
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals (root is window)
+        root.returnExports = factory(root.jQuery);
+    }
+}(this, function ($) {
+    //    methods
+    function myFunc(){};
+
+    //    exposed public method
+    return myFunc;
+}));
+```
