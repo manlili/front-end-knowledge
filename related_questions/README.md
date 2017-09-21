@@ -239,5 +239,12 @@ textarea.addEventListener('drag', function () {
 })
 ```
 - 尽早执行操作（DOMContentLoaded）
-
+```bash
+window.addEventListener('load', function () {
+	//页面所有的资源全部加载完才可以，包括图片，视频，字体等异步资源加载
+})
+document.addEventListener('DOMContentLoaded', function () {
+	//只需要DOM加载完便可，此时的图片，视频或者字体等异步资源可能还没加载完
+})
+```
 ## 怎么保证程序的安全性
