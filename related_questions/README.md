@@ -82,3 +82,110 @@ git log -S "代码细节"
 - 将线上出问题的代码打包压缩，备份
 - 将上线前已经备份的压缩包解压，发布到服务器，并生成新的版本号
 
+## 描述从输入url到得到html的过程
+### 加载资源的形式
+- 输入url加载html页面
+- 加载静态资源,img,css,字体文件等
+- 加载脚本 `<script src="***"></script>`
+### 上述的加载都符合一个过程
+- 浏览器根据DNS服务器得到域名的IP地址
+- 然后浏览器向这个IP地址的机器发送http或者https请求
+- 服务器收到、处理并返回http请求
+- 浏览器得到返回的内容
+
+## 浏览器渲染页面的过程
+- 根据HTML结构生成DOM Tree
+- 根据CSS生成CSSOM
+- 将DOM和CSSOM整合形成RenderTree
+- 根据RenderTree开始渲染和展示页面
+- 遇见`<script>`时，会执行JS并阻塞渲染，等js执行完页面继续渲染
+### 浏览器渲染页面的实例
+```bash
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<p>测试</p>
+	</body>
+</html>
+```
+上面按顺序执行
+
+```bash
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="test.css"/>  <!--test.css内容涉及p标签样式-->
+	</head>
+	<body>
+		<p>测试</p>
+	</body>
+</html>
+```
+上面渲染流程是
+- 从上往下执行
+- 遇见link链接的css,先去拿css样式
+- 继续执行遇见body里面的P标签，由于css里面有P标签的样式，所以直接渲染P标签和它的样式
+- 继续执行到完毕
+
+```bash
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<p>测试</p>
+		<script type="text/javascript">
+			//涉及修改p标签的内容
+		</script>
+		<div>哈哈</div>
+	</body>
+</html>
+```
+上面渲染流程是
+- 从上往下执行
+- 继续执行遇见body里面的script，这时候停止渲染，直接去执行js内容，这时候发现P标签被修改，再去修改P标签，然后再去执行`<div>哈哈</div>`
+- 继续执行到完毕
+
+```bash
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<p>测试</p>
+		<img src="***" alt="" />
+		<div>哈哈</div>
+	</body>
+</html>
+```
+上面渲染流程是
+- 从上往下执行
+- 继续执行遇见body里面的img,由于img是异步加载的，继续执行`<div>哈哈</div>`，等图片加载完在插入html
+- 继续执行到完毕
+
+## 为什么要将css放到head中
+因为在header中遇见css，直接去渲染css，等css渲染完再去渲染body里面的内容，body里面的内容可以直接渲染div和div的样式
+
+### 为什么要把js放到body最下面
+- 不会阻塞body里面的代码，更快的渲染页面
+- 因为js脚本很有可能修改body里面html内容，所以最后执行完js，一次性修改html
+
+## window.onload和DOMContentLoaded区别
+### window.onload
+页面所有的资源全部加载完才可以，包括图片，视频，字体等异步资源加载
+### DOMContentLoaded
+只需要DOM加载完便可，此时的图片，视频或者字体等异步资源可能还没加载完
+
+## 页面性能优化
+
+## 怎么保证程序的安全性
