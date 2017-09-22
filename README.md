@@ -53,4 +53,9 @@
     <td align="center" valign="middle">补充部分</td>
     <td align="center" valign="middle"><a target="_blank" href="https://github.com/manlili/web_interview_question/tree/master/related_questions">点这里跳转</a></td>
   </tr>
+  <tr>
+    <td align="center" valign="middle"><strong>面试知识</strong></td>
+    <td align="center" valign="middle">补充部分</td>
+    <td align="center" valign="middle"><a target="_blank" href="https://github.com/manlili/web_interview_question/tree/master/interview">点这里跳转</a></td>
+  </tr>
 </table>
