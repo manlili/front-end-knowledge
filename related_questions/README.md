@@ -69,6 +69,15 @@ git merge 想要被融合的分支名
 
 // 查找某句是谁修改的
 git log -S "代码细节"
+
+//merge mster提示Please enter a commit message to explain why this merge is necessary.
+1.按键盘字母 i 进入insert模式
+
+2.修改最上面那行黄色合并信息,可以不修改
+
+3.按键盘左上角"Esc"
+
+4.输入":wq",注意是冒号+wq,按回车键即可
 ```
 ### 关于git如何解决代码冲突
 
